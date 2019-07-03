@@ -7,6 +7,7 @@
   <groupId>com.atcrowdfunding</groupId>
   <artifactId>atcrowdfunding-portal-api</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
   <name>atcrowdfunding-portal-api</name>
   <!-- FIXME change it to the project's website -->
