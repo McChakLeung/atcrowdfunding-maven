@@ -7,6 +7,6 @@
     <groupId>com.atcrowdfunding</groupId>
     <artifactId>atcrowdfunding-bean</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <packaging>jar</packaging>
     
 </project>
