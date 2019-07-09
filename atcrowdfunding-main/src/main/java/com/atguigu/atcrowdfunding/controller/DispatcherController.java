@@ -1,10 +1,15 @@
 package com.atguigu.atcrowdfunding.controller;
 
+import com.atguigu.atcrowdfunding.manager.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class DispatcherController {
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 该方法接收webapp目录中index.jsp跳转过来的请求，其中的index.htm在控制器中可以被识别
