@@ -1,9 +1,15 @@
 package com.atguigu.atcrowdfunding.controller;
 
+import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
+import com.atguigu.atcrowdfunding.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class DispatcherController {
@@ -29,5 +35,33 @@ public class DispatcherController {
     @RequestMapping("/login")
     public String login(){
         return "login";
+    }
+
+    /**
+     * 接收doLogin中的重定向请求，并调整至main.jsp页面
+     *
+     * @return main.jsp
+     */
+    @RequestMapping("/main")
+    public String main(){
+        return "main";
+    }
+
+    /**
+     * 登录请求：接收页面请求的参数(loginacct登录名，userpswd登录密码，type登录类型)，并传递给后台查询
+     *
+     * @return
+     */
+    @RequestMapping("/doLogin")
+    public String doLogin(String loginacct, String userpswd, String type, HttpSession session){
+        //创建一个map来接收参数
+        Map<String,Object> params = new HashMap();
+        params.put("loginacct",loginacct);
+        params.put("userpswd",userpswd);
+        params.put("type",type);
+        User user = userService.selectUserByLoginAccAndUserPassword(params);
+        //创建一个Const工具类，存放常量
+        session.setAttribute(Const.LOGIN_USER,user);
+        return "redirect:/main.htm";
     }
 }

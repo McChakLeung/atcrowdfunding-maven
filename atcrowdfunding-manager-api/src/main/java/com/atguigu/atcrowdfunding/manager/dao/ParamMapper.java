@@ -1,6 +1,7 @@
 package com.atguigu.atcrowdfunding.manager.dao;
 
 import com.atguigu.atcrowdfunding.bean.ParamExample;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,19 +12,19 @@ public interface ParamMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(com.atguigu.atcrowdfunding.bean.Param record);
+    int insert(Param record);
 
-    int insertSelective(com.atguigu.atcrowdfunding.bean.Param record);
+    int insertSelective(Param record);
 
-    List<com.atguigu.atcrowdfunding.bean.Param> selectByExample(ParamExample example);
+    List<Param> selectByExample(ParamExample example);
 
-    com.atguigu.atcrowdfunding.bean.Param selectByPrimaryKey(Integer id);
+    Param selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@com.atguigu.atcrowdfunding.bean.Param("record") com.atguigu.atcrowdfunding.bean.Param record, @com.atguigu.atcrowdfunding.bean.Param("example") ParamExample example);
+    int updateByExampleSelective(@Param("record") Param record, @Param("example") ParamExample example);
 
-    int updateByExample(@com.atguigu.atcrowdfunding.bean.Param("record") com.atguigu.atcrowdfunding.bean.Param record, @com.atguigu.atcrowdfunding.bean.Param("example") ParamExample example);
+    int updateByExample(@Param("record") Param record, @Param("example") ParamExample example);
 
-    int updateByPrimaryKeySelective(com.atguigu.atcrowdfunding.bean.Param record);
+    int updateByPrimaryKeySelective(Param record);
 
-    int updateByPrimaryKey(com.atguigu.atcrowdfunding.bean.Param record);
+    int updateByPrimaryKey(Param record);
 }
