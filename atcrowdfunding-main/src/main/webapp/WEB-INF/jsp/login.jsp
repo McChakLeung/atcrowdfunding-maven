@@ -33,24 +33,22 @@
 
 <div class="container">
 
-    <form action="${APP_PATH}/doLogin.do" method="post" id="loginForm" class="form-signin" role="form">
+    <form action="" method="post" id="loginForm" class="form-signin" role="form">
         <h2 class="form-signin-heading"><i class="glyphicon glyphicon-log-in"></i> 用户登录</h2>
         <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" id="loginacct" name="loginacct" placeholder="请输入登录账号" autofocus>
+            <input type="text" class="form-control" id="floginacct" name="loginacct" placeholder="请输入登录账号" autofocus>
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" id="userpswd" name="userpswd" placeholder="请输入登录密码" style="margin-top:10px;">
+            <input type="text" class="form-control" id="fuserpswd" name="userpswd" placeholder="请输入登录密码" style="margin-top:10px;">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
-            <span class="glyphicon glyphicon-lock form-control-feedback">${exception.message }</span>
-        </div>
-        <div class="form-group has-success has-feedback">
-            <select class="form-control" name="type">
+            <select class="form-control" id="ftype" name="type">
                 <option value="member">会员</option>
                 <option value="user">管理</option>
             </select>
+            <span id="fmessage" style="color: #a83c3a;">${exception.message }</span>
         </div>
         <div class="checkbox">
             <label>
@@ -71,13 +69,53 @@
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
 <script>
     function dologin() {
-        $("#loginForm").submit();
-        // var type = $(":selected").val();
-        // if ( type == "user" ) {
-        //     window.location.href = "main.html";
-        // } else {
-        //     window.location.href = "index.html";
-        // }
+
+        //获取表单提交的数据
+        var floginacct = $("#floginacct");
+        var fuserpswd = $("#fuserpswd");
+        var ftype = $("#ftype");
+
+        //异步请求
+        $.ajax({
+            type:"post",
+            url:"${APP_PATH}/doLogin.do",
+            data:{
+                "floginacct":floginacct.val(),
+                "fuserpswd":fuserpswd.val(),
+                "ftype":ftype.val()
+            },
+            //该函数用于在发生ajax请求前的处理，一般用于表单校验、加载进度条等
+            beforeSend:function (XMLHttpRequest) {
+                //验证用户名
+                if($.trim(floginacct.val()) == ""){
+                    $("#fmessage").text("用户名不能为空，请重新输入");
+                    floginacct.val("");
+                    floginacct.focus();
+                    return false
+                }
+
+                //验证密码
+                if($.trim(fuserpswd.val()) == ""){
+                    $("#fmessage").text("密码不能为空，请重新输入");
+                    fuserpswd.val("");
+                    fuserpswd.focus();
+                    return false
+                }
+
+            },
+            success:function (result) {
+                if(result.succes==true) {
+                    alert("ok")
+                }else{
+                    alert("fail")
+                }
+            }
+            
+        });
+
+        //同步请求
+        // $("#loginForm").submit();
+
     }
 </script>
 </body>
