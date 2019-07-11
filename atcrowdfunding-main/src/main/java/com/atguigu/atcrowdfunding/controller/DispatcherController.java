@@ -1,6 +1,7 @@
 package com.atguigu.atcrowdfunding.controller;
 
 import com.atguigu.atcrowdfunding.bean.User;
+import com.atguigu.atcrowdfunding.exception.LoginException;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Const;
@@ -89,11 +90,10 @@ public class DispatcherController {
             session.setAttribute(Const.LOGIN_USER,user);
             result.setSuccess(true);
         }catch (Exception e){
-            result.setMessage("登录失败!");
-            e.printStackTrace();
             result.setSuccess(false);
+            result.setMessage("登录错误，请联系管理员处理！");
+            e.printStackTrace();
         }
-
         return result;
     }
 }

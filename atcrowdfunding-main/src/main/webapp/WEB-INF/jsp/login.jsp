@@ -40,7 +40,7 @@
             <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
-            <input type="text" class="form-control" id="fuserpswd" name="userpswd" placeholder="请输入登录密码" style="margin-top:10px;">
+            <input type="password" class="form-control" id="fuserpswd" name="userpswd" placeholder="请输入登录密码" style="margin-top:10px;">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="form-group has-success has-feedback">
@@ -80,9 +80,9 @@
             type:"post",
             url:"${APP_PATH}/doLogin.do",
             data:{
-                "floginacct":floginacct.val(),
-                "fuserpswd":fuserpswd.val(),
-                "ftype":ftype.val()
+                loginacct:floginacct.val(),
+                userpswd:fuserpswd.val(),
+                type:ftype.val()
             },
             //该函数用于在发生ajax请求前的处理，一般用于表单校验、加载进度条等
             beforeSend:function (XMLHttpRequest) {
@@ -105,9 +105,9 @@
             },
             success:function (result) {
                 if(result.succes==true) {
-                    alert("ok")
+                    window.location.href="${APP_PATH}/main.htm";
                 }else{
-                    alert("fail")
+                    $("#fmessage").text(result.message);
                 }
             }
             
