@@ -104,7 +104,7 @@
 
             },
             success:function (result) {
-                if(result.succes==true) {
+                if(result.success==true) {
                     window.location.href="${APP_PATH}/main.htm";
                 }else{
                     $("#fmessage").text(result.message);

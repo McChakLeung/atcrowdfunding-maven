@@ -5,6 +5,7 @@ import com.atguigu.atcrowdfunding.exception.LoginException;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Const;
+import com.atguigu.atcrowdfunding.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,7 +84,7 @@ public class DispatcherController {
             //创建一个map来接收参数
             Map<String,Object> params = new HashMap();
             params.put("loginacct",loginacct);
-            params.put("userpswd",userpswd);
+            params.put("userpswd", MD5Util.digest(userpswd));
             params.put("type",type);
             User user = userService.selectUserByLoginAccAndUserPassword(params);
             //创建一个Const工具类，存放常量
@@ -95,5 +96,11 @@ public class DispatcherController {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/index.htm";
     }
 }
