@@ -46,9 +46,9 @@
         <div class="form-group has-success has-feedback">
             <select class="form-control" id="ftype" name="type">
                 <option value="member">会员</option>
-                <option value="user">管理</option>
+                <option value="user" selected>管理</option>
             </select>
-            <span id="fmessage" style="color: #a83c3a;">${exception.message }</span>
+            <%--<span id="fmessage" style="color: #a83c3a;">${exception.message }</span>--%>
         </div>
         <div class="checkbox">
             <label>
@@ -67,6 +67,7 @@
 </div>
 <script src="${APP_PATH}/jquery/jquery-2.1.1.min.js"></script>
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${APP_PATH}/jquery/layer/layer.js"></script>
 <script>
     function dologin() {
 
@@ -74,6 +75,7 @@
         var floginacct = $("#floginacct");
         var fuserpswd = $("#fuserpswd");
         var ftype = $("#ftype");
+        var loadingIndex = -1;
 
         //异步请求
         $.ajax({
@@ -88,26 +90,38 @@
             beforeSend:function (XMLHttpRequest) {
                 //验证用户名
                 if($.trim(floginacct.val()) == ""){
-                    $("#fmessage").text("用户名不能为空，请重新输入");
-                    floginacct.val("");
-                    floginacct.focus();
+                    // $("#fmessage").text("用户名不能为空，请重新输入");
+                    layer.msg("用户名不能为空，请重新输入", {time:2000, icon:5, shift:5},function () {
+                        floginacct.val("");
+                        floginacct.focus();
+                    })
+
                     return false
                 }
 
                 //验证密码
                 if($.trim(fuserpswd.val()) == ""){
-                    $("#fmessage").text("密码不能为空，请重新输入");
-                    fuserpswd.val("");
-                    fuserpswd.focus();
+                    // $("#fmessage").text("密码不能为空，请重新输入");
+                    layer.msg("密码不能为空，请重新输入", {time:2000, icon:5, shift:5},function () {
+                        fuserpswd.val("");
+                        fuserpswd.focus();
+                    })
                     return false
                 }
-
+                loadingIndex = layer.load(3, {time: 10*1000});
             },
             success:function (result) {
+                layer.close(loadingIndex);
                 if(result.success==true) {
+                    <%--if ("member" == $("#ftype").val()) {--%>
+                        <%--window.location.href = "${APP_PATH}/index.htm";--%>
+                    <%--} else {--%>
+                        <%--window.location.href="${APP_PATH}/main.htm";--%>
+                    <%--}--%>
                     window.location.href="${APP_PATH}/main.htm";
                 }else{
-                    $("#fmessage").text(result.message);
+                    //$("#fmessage").text(result.message);
+                    layer.msg(result.message,{time:2000, icon:5, shift:5})
                 }
             }
             

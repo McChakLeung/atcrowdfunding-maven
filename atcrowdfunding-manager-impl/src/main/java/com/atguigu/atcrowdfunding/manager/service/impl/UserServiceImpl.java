@@ -19,9 +19,9 @@ public class UserServiceImpl implements UserService {
     public User selectUserByLoginAccAndUserPassword(Map<String, Object> params) {
         User user = userMapper.selectUserByLoginAccAndUserPassword(params);
         //自定义一个异常，抛出LoginException，该Exception定义在common项目中
-        if(user==null){
-            throw new LoginException("用户名或密码错误，请重新登录");
-        }
+//        if(user==null){
+//            throw new LoginException("用户名或密码错误，请重新登录");
+//        }
         return user;
     }
 }

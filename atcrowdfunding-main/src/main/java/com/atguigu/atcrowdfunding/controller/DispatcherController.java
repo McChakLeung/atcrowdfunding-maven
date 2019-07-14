@@ -87,9 +87,16 @@ public class DispatcherController {
             params.put("userpswd", MD5Util.digest(userpswd));
             params.put("type",type);
             User user = userService.selectUserByLoginAccAndUserPassword(params);
+            //判断是否能查询到user对象，如果查询不到，则说明用户名或密码错误
+            if(user == null){
+                result.setSuccess(false);
+                result.setMessage("用户名或密码错误，请确认后重新登录");
+                return result;
+            }
             //创建一个Const工具类，存放常量
             session.setAttribute(Const.LOGIN_USER,user);
             result.setSuccess(true);
+
         }catch (Exception e){
             result.setSuccess(false);
             result.setMessage("登录错误，请联系管理员处理！");
