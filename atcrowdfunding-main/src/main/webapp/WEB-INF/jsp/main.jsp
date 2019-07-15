@@ -7,17 +7,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="GB18030">
+<html lang="zh-CN">
 <head>
-    <meta charset="GB18030">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="${APP_PATH}/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${APP_PATH}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="${APP_PATH}/css/main.css">
     <style>
         .tree li {
             list-style-type: none;
@@ -51,7 +51,7 @@
                         <span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
                         <ul style="margin-top:10px;display:none;">
                             <li style="height:30px;">
-                                <a href="user.html"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
+                                <a href="${APP_PATH}/user/user.htm"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
                             </li>
                             <li style="height:30px;">
                                 <a href="role.html"><i class="glyphicon glyphicon-king"></i> 角色维护</a>
@@ -135,9 +135,9 @@
         </div>
     </div>
 </div>
-<script src="jquery/jquery-2.1.1.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="script/docs.min.js"></script>
+<script src="${APP_PATH}/jquery/jquery-2.1.1.min.js"></script>
+<script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
+<script src="${APP_PATH}/script/docs.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $(".list-group-item").click(function(){

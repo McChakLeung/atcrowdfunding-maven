@@ -31,4 +31,8 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User selectUserByLoginAccAndUserPassword(Map<String, Object> params);
+
+    List<User> selectUserList(@Param("pageno") Integer pageno, @Param("pagesize") Integer pagesize);
+
+    Integer selectCount();
 }

@@ -235,4 +235,15 @@
     and
     userpswd = #{userpswd}
   </select>
+
+  <select id="selectUserList"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_user
+    limit #{pageno}, #{pagesize}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(id) from t_user
+  </select>
 </mapper>
