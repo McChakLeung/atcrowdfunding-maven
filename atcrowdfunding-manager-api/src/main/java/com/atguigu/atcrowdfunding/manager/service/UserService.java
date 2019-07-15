@@ -9,4 +9,6 @@ public interface UserService {
     User selectUserByLoginAccAndUserPassword(Map<String, Object> params);
 
     Page<User> selectUserList(Integer pageno, Integer pagesize);
+
+    void saveUser(User user);
 }

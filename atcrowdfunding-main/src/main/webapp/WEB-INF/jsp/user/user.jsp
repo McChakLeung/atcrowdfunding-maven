@@ -164,7 +164,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.page.datalist}" var="user"  varStatus="status">
+                            <c:forEach items="${page.datalist}" var="user"  varStatus="status">
                                 <tr>
                                     <td>${status.count}</td>
                                     <td><input type="checkbox"></td>
@@ -183,13 +183,27 @@
                             <tr >
                                 <td colspan="6" align="center">
                                     <ul class="pagination">
-                                        <li class="disabled"><a href="#">上一页</a></li>
-                                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li><a href="#">下一页</a></li>
+                                        <c:if test="${page.pageno==1}">
+                                            <li class="disabled"><a href="#">上一页</a></li>
+                                        </c:if>
+                                        <c:if test="${page.pageno!=1}">
+                                            <li><a href="#" onclick="pagechange(${page.pageno-1})">上一页</a></li>
+                                        </c:if>
+
+                                        <c:forEach begin="1" end="${page.totalno}" var="num">
+                                            <li
+                                                <c:if test="${page.pageno==num}">
+                                                    class="active"
+                                                </c:if>
+                                            ><a href="#" onclick="pagechange(${num})">${num}</a></li>
+                                        </c:forEach>
+
+                                        <c:if test="${page.pageno==page.totalno}">
+                                            <li class="disabled"><a href="#">下一页</a></li>
+                                        </c:if>
+                                        <c:if test="${page.pageno!=page.totalno}">
+                                            <li><a href="#" onclick="pagechange(${page.pageno+1})">下一页</a></li>
+                                        </c:if>
                                     </ul>
                                 </td>
                             </tr>
@@ -225,6 +239,10 @@
     $("tbody .btn-primary").click(function(){
         window.location.href = "edit.html";
     });
+
+    function pagechange(pageno) {
+        window.location.href="${APP_PATH}/user/user.htm?pageno="+pageno;
+    }
 </script>
 </body>
 </html>

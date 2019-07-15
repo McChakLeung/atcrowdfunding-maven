@@ -2,6 +2,7 @@ package com.atcrowdfunding;
 
 import static org.junit.Assert.assertTrue;
 
+import com.vaadin.service.ApplicationContext;
 import org.junit.Test;
 
 /**
@@ -17,4 +18,5 @@ public class AppTest
     {
         assertTrue( true );
     }
+
 }
