@@ -32,7 +32,11 @@ public interface UserMapper {
 
     User selectUserByLoginAccAndUserPassword(Map<String, Object> params);
 
-    List<User> selectUserList(@Param("pageno") Integer pageno, @Param("pagesize") Integer pagesize);
+//    List<User> selectUserList(@Param("pageno") Integer pageno, @Param("pagesize") Integer pagesize);
+//
+//    Integer selectCount();
 
-    Integer selectCount();
+    List<User> selectUserList(Map<String, Object> params);
+
+    Integer selectCount(Map<String, Object> params);
 }

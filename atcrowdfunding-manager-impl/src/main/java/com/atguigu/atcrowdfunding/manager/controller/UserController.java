@@ -28,11 +28,16 @@ public class UserController {
     @RequestMapping("/user")
     public String index(@RequestParam(value = "pageno",required = false,defaultValue = "1") Integer pageno,
                         @RequestParam(value = "pagesize",required = false,defaultValue = "10") Integer pagesize,
+                        @RequestParam(value = "queryText",required = false) String queryText,
                         Map<String,Object> map){
 
-        Page<User> page = userService.selectUserList(pageno,pagesize);
+        Map<String,Object> params = new HashMap<>();
+        params.put("pageno",pageno);
+        params.put("pagesize",pagesize);
+        params.put("queryText",queryText);
+        Page<User> page = userService.selectUserList(params);
         map.put(Const.PAGE,page);
-
+        map.put("queryText",queryText);
         return "user/user";
     }
 }

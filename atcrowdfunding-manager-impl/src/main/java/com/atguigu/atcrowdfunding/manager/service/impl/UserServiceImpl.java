@@ -27,16 +27,31 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public Page<User> selectUserList(Integer pageno, Integer pagesize) {
+//    @Override
+//    public Page<User> selectUserList(Integer pageno, Integer pagesize) {
+//
+//        Page<User> page = new Page<>(pageno,pagesize);
+//        //查询用户列表数据
+//        List<User> datas = userMapper.selectUserList(page.getStartline(),pagesize);
+//        page.setDatalist(datas);
+//
+//        //查询用户总数
+//        Integer totalsize = userMapper.selectCount();
+//        //将查询结果存放到公共的Page类中
+//        page.setTotalsize(totalsize);
+//        return page;
+//    }
 
-        Page<User> page = new Page<>(pageno,pagesize);
+    @Override
+    public Page<User> selectUserList(Map<String, Object> params) {
+        Page<User> page = new Page<>((Integer) params.get("pageno"),(Integer)params.get("pagesize"));
         //查询用户列表数据
-        List<User> datas = userMapper.selectUserList(page.getStartline(),pagesize);
+        params.put("startline",page.getStartline());
+        List<User> datas = userMapper.selectUserList(params);
         page.setDatalist(datas);
 
         //查询用户总数
-        Integer totalsize = userMapper.selectCount();
+        Integer totalsize = userMapper.selectCount(params);
         //将查询结果存放到公共的Page类中
         page.setTotalsize(totalsize);
         return page;
