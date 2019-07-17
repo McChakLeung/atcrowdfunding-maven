@@ -142,7 +142,7 @@
                         <div class="form-group has-feedback">
                             <div class="input-group">
                                 <div class="input-group-addon">查询条件</div>
-                                <input id="fqueryText" class="form-control has-success" name="queryText" type="text" placeholder="请输入查询条件">
+                                <input id="fqueryText" class="form-control has-success" value="${queryText}" name="queryText" type="text" placeholder="请输入查询条件">
                             </div>
                         </div>
                         <button id="queryBtn" type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询</button>
@@ -240,9 +240,10 @@
         window.location.href = "edit.html";
     });
 
-    <%--function pagechange(pageno) {--%>
-        <%--window.location.href="${APP_PATH}/user/user.htm?pageno="+pageno;--%>
-    <%--}--%>
+    function pagechange(pageno) {
+        var queryText = $("#queryText").val();
+        window.location.href="${APP_PATH}/user/user.htm?pageno="+pageno+"&queryText="+queryText;
+    }
 </script>
 </body>
 </html>
