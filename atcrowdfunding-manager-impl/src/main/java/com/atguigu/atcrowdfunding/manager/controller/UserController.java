@@ -56,7 +56,7 @@ public class UserController {
     @RequestMapping("/index")
     public Object toIndex(@RequestParam(value = "pageno",required = false,defaultValue = "1") Integer pageno,
                         @RequestParam(value = "pagesize",required = false,defaultValue = "10") Integer pagesize,
-                        Map<String,Object> map){
+                        String queryText){
 
         AjaxResult result = new AjaxResult();
 
@@ -64,7 +64,7 @@ public class UserController {
             Map<String,Object> params = new HashMap<>();
             params.put("pageno",pageno);
             params.put("pagesize",pagesize);
-//        params.put("queryText",queryText);
+            params.put("queryText",queryText);
             Page<User> page = userService.selectUserList(params);
             if(page == null){
                 result.setSuccess(false);

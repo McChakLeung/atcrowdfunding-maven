@@ -142,10 +142,10 @@
                         <div class="form-group has-feedback">
                             <div class="input-group">
                                 <div class="input-group-addon">查询条件</div>
-                                <input id="fqueryText" class="form-control has-success" name="queryText" type="text" placeholder="请输入查询条件">
+                                <input id="fqueryText" class="form-control has-success" type="text" placeholder="请输入查询条件">
                             </div>
                         </div>
-                        <button id="queryBtn" type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i> 查询</button>
+                        <button id="queryBtn" type="button" class="btn btn-warning" ><i class="glyphicon glyphicon-search"></i> 查询</button>
                     </form>
                     <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
                     <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='add.html'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
@@ -164,46 +164,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <%--<c:forEach items="${page.datalist}" var="user"  varStatus="status">--%>
-                                <%--<tr>--%>
-                                    <%--<td>${status.count}</td>--%>
-                                    <%--<td><input type="checkbox"></td>--%>
-                                    <%--<td>${user.loginacct}</td>--%>
-                                    <%--<td>${user.username}</td>--%>
-                                    <%--<td>${user.email}</td>--%>
-                                    <%--<td>--%>
-                                        <%--<button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>--%>
-                                        <%--<button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>--%>
-                                        <%--<button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>--%>
-                                    <%--</td>--%>
-                                <%--</tr>--%>
-                            <%--</c:forEach>--%>
+
                             </tbody>
                             <tfoot>
                             <tr >
                                 <td colspan="6" align="center">
                                     <ul class="pagination">
-                                        <%--<c:if test="${page.pageno==1}">--%>
-                                            <%--<li class="disabled"><a href="#">上一页</a></li>--%>
-                                        <%--</c:if>--%>
-                                        <%--<c:if test="${page.pageno!=1}">--%>
-                                            <%--<li><a href="#" onclick="pagechange(${page.pageno-1})">上一页</a></li>--%>
-                                        <%--</c:if>--%>
 
-                                        <%--<c:forEach begin="1" end="${page.totalno}" var="num">--%>
-                                            <%--<li--%>
-                                                <%--<c:if test="${page.pageno==num}">--%>
-                                                    <%--class="active"--%>
-                                                <%--</c:if>--%>
-                                            <%--><a href="#" onclick="pagechange(${num})">${num}</a></li>--%>
-                                        <%--</c:forEach>--%>
-
-                                        <%--<c:if test="${page.pageno==page.totalno}">--%>
-                                            <%--<li class="disabled"><a href="#">下一页</a></li>--%>
-                                        <%--</c:if>--%>
-                                        <%--<c:if test="${page.pageno!=page.totalno}">--%>
-                                            <%--<li><a href="#" onclick="pagechange(${page.pageno+1})">下一页</a></li>--%>
-                                        <%--</c:if>--%>
                                     </ul>
                                 </td>
                             </tr>
@@ -242,17 +209,19 @@
         window.location.href = "edit.html";
     });
 
-    function queryPageUser(pageno) {
-        //var queryText = $("#fqueryText").val();
-        var loadingIndex = -1;
+    var loadingIndex = -1;
 
+    var jsonObj = {
+        "pageno":1,
+        "pagesize":10
+    };
+
+    function queryPageUser(pageno) {
+        jsonObj.pageno = pageno;
         $.ajax({
             type:"post",
             url:"${APP_PATH}/user/index.do",
-            data:{
-                "pageno":pageno,
-                "pagesize":10
-            },
+            data:jsonObj,
             beforeSend:function () {
                 loadingIndex = layer.load(3, {time: 10*1000});
                 return true;
@@ -306,9 +275,15 @@
                     layer.msg(result.message,{time:2000, icon:5, shift:5})
                 }
             }
-
         })
     }
+
+    //模糊查询函数调用
+    $("#queryBtn").click(function () {
+        var queryText = $("#fqueryText").val();
+        jsonObj.queryText = queryText;
+        queryPageUser(1);
+    });
 
 </script>
 </body>
