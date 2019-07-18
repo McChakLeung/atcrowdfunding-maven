@@ -261,7 +261,8 @@
                 layer.close(loadingIndex);
                 if(result.success){
                     var page = result.page ;
-                    var data = page.datas ;
+                    var data = page.datalist ;
+                    //数据行
                     var content = '';
                     $.each(data,function(i,n){
                         content+='<tr>';
@@ -278,6 +279,28 @@
                         content+='</tr>';
                     });
                     $("tbody").html(content);
+
+                    //分页
+                    var contentbar = '';
+                    if(page.pageno==1){
+                        contentbar += '<li class="disabled"><a href="#">上一页</a></li>';
+                    }else{
+                        contentbar += '<li><a href="#" onclick="queryPageUser('+(page.pageno-1)+')">上一页</a></li>';
+                    }
+
+                    for(var i =1; i <= page.pagesize;i++) {
+                        contentbar += '<li ';
+                        if(i==page.pageno) {
+                            contentbar += 'class= "active"';
+                        }
+                            contentbar += '><a href="#" onclick="queryPageUser(' + i + ')">' + i + '</a></li>';
+                    }
+                    if(page.pageno==page.pagesize) {
+                        contentbar += '<li class="disabled"><a href="#">下一页</a></li>';
+                    }else{
+                        contentbar += '<li><a href="#" onclick="queryPageUser('+(page.pageno+1)+')">下一页</a></li>';
+                    }
+                    $(".pagination").html(contentbar);
 
                 }else{
                     layer.msg(result.message,{time:2000, icon:5, shift:5})
