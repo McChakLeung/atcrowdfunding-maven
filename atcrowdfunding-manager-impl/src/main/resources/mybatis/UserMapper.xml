@@ -256,7 +256,7 @@
       loginacct like concat("%",#{queryText},"%")
     </if>
   </where>
-  limit #{pageno}, #{pagesize}
+  limit #{startline}, #{pagesize}
   </select>
 
   <select id="selectCount" resultType="java.lang.Integer">

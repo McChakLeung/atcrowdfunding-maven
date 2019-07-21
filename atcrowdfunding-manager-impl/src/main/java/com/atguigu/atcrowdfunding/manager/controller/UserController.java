@@ -5,6 +5,7 @@ import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Const;
 import com.atguigu.atcrowdfunding.util.Page;
+import com.atguigu.atcrowdfunding.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,7 +65,12 @@ public class UserController {
             Map<String,Object> params = new HashMap<>();
             params.put("pageno",pageno);
             params.put("pagesize",pagesize);
-            params.put("queryText",queryText);
+            if(StringUtil.isNotEmpty(queryText)){
+                if(queryText.contains("%")){
+                    queryText = queryText.replaceAll("%", "\\\\%");
+                }
+                params.put("queryText", queryText); //   \%
+            }
             Page<User> page = userService.selectUserList(params);
             if(page == null){
                 result.setSuccess(false);

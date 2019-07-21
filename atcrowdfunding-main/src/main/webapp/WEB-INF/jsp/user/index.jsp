@@ -209,6 +209,11 @@
         window.location.href = "edit.html";
     });
 
+    function pageChange(pageno){
+        //window.location.href="${APP_PATH}/user/index.do?pageno="+pageno ;
+        queryPageUser(pageno);
+    }
+
     var loadingIndex = -1;
 
     var jsonObj = {
@@ -254,20 +259,20 @@
                     if(page.pageno==1){
                         contentbar += '<li class="disabled"><a href="#">上一页</a></li>';
                     }else{
-                        contentbar += '<li><a href="#" onclick="queryPageUser('+(page.pageno-1)+')">上一页</a></li>';
+                        contentbar += '<li><a href="#" onclick="pageChange('+(page.pageno-1)+')">上一页</a></li>';
                     }
 
-                    for(var i =1; i <= page.pagesize;i++) {
+                    for(var i =1; i <= page.totalno;i++) {
                         contentbar += '<li ';
-                        if(i==page.pageno) {
+                        if(page.pageno == i) {
                             contentbar += 'class= "active"';
                         }
-                            contentbar += '><a href="#" onclick="queryPageUser(' + i + ')">' + i + '</a></li>';
+                            contentbar += '><a href="#" onclick="pageChange(' + i + ')">' + i + '</a></li>';
                     }
-                    if(page.pageno==page.pagesize) {
+                    if(page.pageno==page.totalno) {
                         contentbar += '<li class="disabled"><a href="#">下一页</a></li>';
                     }else{
-                        contentbar += '<li><a href="#" onclick="queryPageUser('+(page.pageno+1)+')">下一页</a></li>';
+                        contentbar += '<li><a href="#" onclick="pageChange('+(page.pageno+1)+')">下一页</a></li>';
                     }
                     $(".pagination").html(contentbar);
 
