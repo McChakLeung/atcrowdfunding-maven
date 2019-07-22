@@ -15,5 +15,9 @@ public interface UserService {
 
     Page<User> selectUserList(Map<String,Object> params);
 
-    void saveUser(User user);
+    Integer saveUser(User user);
+
+    User selectUserByID(Integer id);
+
+    Integer updateUser(User user);
 }

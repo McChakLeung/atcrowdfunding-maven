@@ -47,6 +47,24 @@ public class UserController {
         return "user/index";
     }
 
+    @RequestMapping("/toAdd")
+    public String toAdd(){
+        return "user/add";
+    }
+
+    /**
+     * 接收update前台的数据，根据id查询user，并通过map传回到前端
+     * @param id 用户id
+     * @param map  返回前台数据
+     * @return
+     */
+    @RequestMapping("/toUpdate")
+    public String toUpdate(Integer id, Map<String,Object> map) {
+        User user = userService.selectUserByID(id);
+        map.put("user",user);
+        return "user/update";
+    }
+
     /**
      * 以异步的方式查询用户页面数据，并将结果集放在一个自定义的page类中，该类封装成分页类
      * @param pageno 查询的当前页
@@ -82,6 +100,58 @@ public class UserController {
         }catch (Exception e){
             result.setSuccess(false);
             result.setMessage("查询异常，请联系管理员处理");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 执行添加
+     * @return 返回查询结果集
+     */
+    @ResponseBody
+    @RequestMapping("/doAdd")
+    public Object doAdd(User user){
+
+        AjaxResult result = new AjaxResult();
+
+        try{
+            Integer count = userService.saveUser(user);
+            if(count == 0){
+                result.setSuccess(false);
+                result.setMessage("保存数据失败，请重新尝试");
+                return result;
+            }
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage("保存异常，请联系管理员处理");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 执行更新
+     * @return 返回查询结果集
+     */
+    @ResponseBody
+    @RequestMapping("/doUpdate")
+    public Object doUpdate(User user){
+
+        AjaxResult result = new AjaxResult();
+
+        try{
+            Integer count = userService.updateUser(user);
+            if(count == 0){
+                result.setSuccess(false);
+                result.setMessage("保存数据失败，请重新尝试");
+                return result;
+            }
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage("保存异常，请联系管理员处理");
             e.printStackTrace();
         }
         return result;

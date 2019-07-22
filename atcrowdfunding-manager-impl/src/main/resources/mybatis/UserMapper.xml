@@ -101,7 +101,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.atguigu.atcrowdfunding.bean.User">
-    insert into t_user (id, loginacct, userpswd, 
+    insert into t_user (id, loginacct, userpswd,
       username, email, createtime
       )
     values (#{id,jdbcType=INTEGER}, #{loginacct,jdbcType=VARCHAR}, #{userpswd,jdbcType=CHAR}, 
@@ -256,6 +256,7 @@
       loginacct like concat("%",#{queryText},"%")
     </if>
   </where>
+  ORDER BY createtime DESC
   limit #{startline}, #{pagesize}
   </select>
 

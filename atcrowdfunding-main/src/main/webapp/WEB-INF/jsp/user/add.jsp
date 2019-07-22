@@ -1,12 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: Administrator
-  Date: 2019/7/15
-  Time: 13:16
+  Date: 2019/7/22
+  Time: 12:39
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ZH-CN">
 <head>
@@ -19,13 +18,12 @@
     <link rel="stylesheet" href="${APP_PATH}/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="${APP_PATH}/css/font-awesome.min.css">
     <link rel="stylesheet" href="${APP_PATH}/css/main.css">
+    <link rel="stylesheet" href="${APP_PATH}/css/doc.min.css">
     <style>
         .tree li {
             list-style-type: none;
             cursor:pointer;
         }
-        table tbody tr:nth-child(odd){background:#F4F4F4;}
-        table tbody td:nth-child(even){color:#C00;}
     </style>
 </head>
 
@@ -34,7 +32,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
-            <div><a class="navbar-brand" style="font-size:32px;" href="#">众筹平台 - 用户维护</a></div>
+            <div><a class="navbar-brand" style="font-size:32px;" href="user.html">众筹平台 - 用户维护</a></div>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -47,7 +45,7 @@
                             <li><a href="#"><i class="glyphicon glyphicon-cog"></i> 个人设置</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-comment"></i> 消息</a></li>
                             <li class="divider"></li>
-                            <li><a href="index.html"><i class="glyphicon glyphicon-off"></i> 退出系统</a></li>
+                            <li><a href="login.html"><i class="glyphicon glyphicon-off"></i> 退出系统</a></li>
                         </ul>
                     </div>
                 </li>
@@ -76,10 +74,10 @@
                         <span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
                         <ul style="margin-top:10px;">
                             <li style="height:30px;">
-                                <a href="${APP_PATH}/user/toIndex.do" style="color:red;"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
+                                <a href="user.html" style="color:red;"><i class="glyphicon glyphicon-user"></i> 用户维护</a>
                             </li>
                             <li style="height:30px;">
-                                <a href="role.html"><i class="glyphicon glyphicon-king"></i> 角色维护</a>
+                                <a href="role.html"><i class="glyphicon glyphicon-certificate"></i> 角色维护</a>
                             </li>
                             <li style="height:30px;">
                                 <a href="permission.html"><i class="glyphicon glyphicon-lock"></i> 许可维护</a>
@@ -133,57 +131,62 @@
             </div>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <ol class="breadcrumb">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">数据列表</a></li>
+                <li class="active">新增</li>
+            </ol>
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"><i class="glyphicon glyphicon-th"></i> 数据列表</h3>
-                </div>
+                <div class="panel-heading">表单数据<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
                 <div class="panel-body">
-                    <form class="form-inline" role="form" style="float:left;" >
-                        <div class="form-group has-feedback">
-                            <div class="input-group">
-                                <div class="input-group-addon">查询条件</div>
-                                <input id="fqueryText" class="form-control has-success" type="text" placeholder="请输入查询条件">
-                            </div>
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="floginacct">登陆账号</label>
+                            <input type="text" class="form-control" id="floginacct" placeholder="请输入登陆账号">
                         </div>
-                        <button id="queryBtn" type="button" class="btn btn-warning" ><i class="glyphicon glyphicon-search"></i> 查询</button>
+                        <div class="form-group">
+                            <label for="fusername">用户名称</label>
+                            <input type="text" class="form-control" id="fusername" placeholder="请输入用户名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="femail">邮箱地址</label>
+                            <input type="email" class="form-control" id="femail" placeholder="请输入邮箱地址">
+                            <p class="help-block label label-warning">请输入合法的邮箱地址, 格式为： xxxx@xxxx.com</p>
+                        </div>
+                        <button type="button" id="addbtn" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+                        <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
                     </form>
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
-                    <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${APP_PATH}/user/toAdd.htm'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
-                    <br>
-                    <hr style="clear:both;">
-                    <div class="table-responsive">
-                        <table class="table  table-bordered">
-                            <thead>
-                            <tr >
-                                <th width="30">#</th>
-                                <th width="30"><input type="checkbox"></th>
-                                <th>账号</th>
-                                <th>名称</th>
-                                <th>邮箱地址</th>
-                                <th width="100">操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                            <tfoot>
-                            <tr >
-                                <td colspan="6" align="center">
-                                    <ul class="pagination">
-
-                                    </ul>
-                                </td>
-                            </tr>
-
-                            </tfoot>
-                        </table>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">帮助</h4>
+            </div>
+            <div class="modal-body">
+                <div class="bs-callout bs-callout-info">
+                    <h4>测试标题1</h4>
+                    <p>测试内容1，测试内容1，测试内容1，测试内容1，测试内容1，测试内容1</p>
+                </div>
+                <div class="bs-callout bs-callout-info">
+                    <h4>测试标题2</h4>
+                    <p>测试内容2，测试内容2，测试内容2，测试内容2，测试内容2，测试内容2</p>
+                </div>
+            </div>
+            <!--
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            -->
+        </div>
+    </div>
+</div>
 <script src="${APP_PATH}/jquery/jquery-2.1.1.min.js"></script>
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
 <script src="${APP_PATH}/script/docs.min.js"></script>
@@ -200,101 +203,88 @@
                 }
             }
         });
-        queryPageUser(1);
-    });
-    $("tbody .btn-success").click(function(){
-        window.location.href = "assignRole.html";
-    });
-    $("tbody .btn-primary").click(function(){
-        window.location.href = "edit.html";
     });
 
-    function pageChange(pageno){
-        //window.location.href="${APP_PATH}/user/index.do?pageno="+pageno ;
-        queryPageUser(pageno);
-    }
+    $("#addbtn").click(function () {
 
-    var loadingIndex = -1;
+        //获取表单提交的数据
+        var floginacct = $("#floginacct");
+        var fusername = $("#fusername");
+        var femail = $("#femail");
+        var loadingIndex = -1;
 
-    var jsonObj = {
-        "pageno":1,
-        "pagesize":10
-    };
-
-    function queryPageUser(pageno) {
-        jsonObj.pageno = pageno;
+        //异步请求
         $.ajax({
             type:"post",
-            url:"${APP_PATH}/user/index.do",
-            data:jsonObj,
-            beforeSend:function () {
-                loadingIndex = layer.load(3, {time: 10*1000});
-                return true;
+            url:"${APP_PATH}/user/doAdd.do",
+            data:{
+                loginacct:floginacct.val(),
+                username:fusername.val(),
+                email:femail.val()
             },
-            success:function(result){
+            //该函数用于在发生ajax请求前的处理，一般用于表单校验、加载进度条等
+            beforeSend:function (XMLHttpRequest) {
+                //验证用户名
+                if($.trim(floginacct.val()) == ""){
+                    // $("#fmessage").text("用户名不能为空，请重新输入");
+                    layer.msg("登录账号不能为空，请重新输入", {time:2000, icon:5, shift:5},function () {
+                        floginacct.val("");
+                        floginacct.focus();
+                    })
+
+                    return false
+                }
+
+                //验证用户名
+                if($.trim(fusername.val()) == ""){
+                    // $("#fmessage").text("密码不能为空，请重新输入");
+                    layer.msg("用户名不能为空，请重新输入", {time:2000, icon:5, shift:5},function () {
+                        fusername.val("");
+                        fusername.focus();
+                    })
+                    return false
+                }
+
+                //验证邮箱是否为空
+                if($.trim(femail.val()) == ""){
+                    // $("#fmessage").text("密码不能为空，请重新输入");
+                    layer.msg("邮箱地址不能为空，请重新输入", {time:2000, icon:5, shift:5},function () {
+                        femail.val("");
+                        femail.focus();
+                    })
+                    return false
+                }
+
+                //验证邮箱格式是否正确
+                if(checkEmail(femail.val())==false){
+                    layer.msg("邮箱格式不正确，请重新输入", {time: 2000, icon: 5, shift: 5}, function () {
+                        femail.focus();
+                    })
+                    return false;
+                }
+
+                loadingIndex = layer.load(3, {time: 10*1000});
+            },
+            success:function (result) {
                 layer.close(loadingIndex);
-                if(result.success){
-                    var page = result.page ;
-                    var data = page.datalist ;
-                    //数据行
-                    var content = '';
-                    $.each(data,function(i,n){
-                        content+='<tr>';
-                        content+='  <td>'+(i+1)+'</td>';
-                        content+='  <td><input type="checkbox"></td>';
-                        content+='  <td>'+n.loginacct+'</td>';
-                        content+='  <td>'+n.username+'</td>';
-                        content+='  <td>'+n.email+'</td>';
-                        content+='  <td>';
-                        content+='	  <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
-                        content+='	  <button type="button" class="btn btn-primary btn-xs" onclick="toUpdate('+n.id+')"><i class=" glyphicon glyphicon-pencil"></i></button>';
-                        content+='	  <button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>';
-                        content+='  </td>';
-                        content+='</tr>';
-                    });
-                    $("tbody").html(content);
-
-                    //分页
-                    var contentbar = '';
-                    if(page.pageno==1){
-                        contentbar += '<li class="disabled"><a href="#">上一页</a></li>';
-                    }else{
-                        contentbar += '<li><a href="#" onclick="pageChange('+(page.pageno-1)+')">上一页</a></li>';
-                    }
-
-                    for(var i =1; i <= page.totalno;i++) {
-                        contentbar += '<li ';
-                        if(page.pageno == i) {
-                            contentbar += 'class= "active"';
-                        }
-                            contentbar += '><a href="#" onclick="pageChange(' + i + ')">' + i + '</a></li>';
-                    }
-                    if(page.pageno==page.totalno) {
-                        contentbar += '<li class="disabled"><a href="#">下一页</a></li>';
-                    }else{
-                        contentbar += '<li><a href="#" onclick="pageChange('+(page.pageno+1)+')">下一页</a></li>';
-                    }
-                    $(".pagination").html(contentbar);
-
+                if(result.success==true) {
+                    window.location.href='${APP_PATH}/user/toIndex.do';
                 }else{
                     layer.msg(result.message,{time:2000, icon:5, shift:5})
                 }
             }
-        })
-    }
 
-    //模糊查询函数调用
-    $("#queryBtn").click(function () {
-        var queryText = $("#fqueryText").val();
-        jsonObj.queryText = queryText;
-        queryPageUser(1);
+        });
+
     });
 
-    function toUpdate(id) {
-        window.location.href = '${APP_PATH}/user/toUpdate.htm?id=' + id;
+    function checkEmail(str) {
+        var email = str;
+        var reg =  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+        if(!reg.test(email)){
+            return false;
+        }
     }
-
 </script>
 </body>
 </html>
-
