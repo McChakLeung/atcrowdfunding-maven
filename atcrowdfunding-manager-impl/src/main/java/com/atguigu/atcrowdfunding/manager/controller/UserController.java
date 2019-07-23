@@ -157,4 +157,30 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 单条记录删除
+     * @return 返回查询结果集
+     */
+    @ResponseBody
+    @RequestMapping("/doDelete")
+    public Object doDelete(Integer id){
+
+        AjaxResult result = new AjaxResult();
+
+        try{
+            Integer count = userService.deleteUserById(id);
+            if(count == 0){
+                result.setSuccess(false);
+                result.setMessage("删除数据失败，请重新尝试");
+                return result;
+            }
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage("删除异常，请联系管理员处理");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

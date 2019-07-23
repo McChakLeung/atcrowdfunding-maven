@@ -20,4 +20,6 @@ public interface UserService {
     User selectUserByID(Integer id);
 
     Integer updateUser(User user);
+
+    Integer deleteUserById(Integer id);
 }

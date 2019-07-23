@@ -207,6 +207,22 @@
     function deleteUser(id,loginacct) {
         layer.confirm("确定要删除【"+loginacct+"】用户吗？",  {icon: 3, title:'提示'}, function(cindex){
             layer.close(cindex);
+            $.ajax({
+                type:"post",
+                url:"${APP_PATH}/user/doDelete.do",
+                data:{
+                    "id":id
+                },
+                success:function (result) {
+                    if(result.success){
+                        window.location.href='${APP_PATH}/user/toIndex.do';
+                    }else{
+                        layer.msg(result.message,{time:2000, icon:5, shift:5});
+                    }
+                }
+
+            });
+
         }, function(cindex){
             layer.close(cindex);
         });
