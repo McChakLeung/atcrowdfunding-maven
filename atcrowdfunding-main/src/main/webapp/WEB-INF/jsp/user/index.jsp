@@ -57,7 +57,7 @@
                         </div>
                         <button id="queryBtn" type="button" class="btn btn-warning" ><i class="glyphicon glyphicon-search"></i> 查询</button>
                     </form>
-                    <button type="button" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
+                    <button type="button" id="deleteBatch" class="btn btn-danger" style="float:right;margin-left:10px;"><i class=" glyphicon glyphicon-remove"></i> 删除</button>
                     <button type="button" class="btn btn-primary" style="float:right;" onclick="window.location.href='${APP_PATH}/user/toAdd.htm'"><i class="glyphicon glyphicon-plus"></i> 新增</button>
                     <br>
                     <hr style="clear:both;">
@@ -66,7 +66,7 @@
                             <thead>
                             <tr >
                                 <th width="30">#</th>
-                                <th width="30"><input type="checkbox"></th>
+                                <th width="30"><input id="AllCheckbox" type="checkbox"></th>
                                 <th>账号</th>
                                 <th>名称</th>
                                 <th>邮箱地址</th>
@@ -151,7 +151,7 @@
                     $.each(data,function(i,n){
                         content+='<tr>';
                         content+='  <td>'+(i+1)+'</td>';
-                        content+='  <td><input type="checkbox"></td>';
+                        content+='  <td><input class="checkboxCollection" type="checkbox"></td>';
                         content+='  <td>'+n.loginacct+'</td>';
                         content+='  <td>'+n.username+'</td>';
                         content+='  <td>'+n.email+'</td>';
@@ -227,6 +227,41 @@
             layer.close(cindex);
         });
     }
+    
+
+    //全选框功能
+    $("#AllCheckbox").click(function () {
+        var checkStatus = this.checked;
+        // if(checkStatus){
+        //     $(".checkboxCollection").prop("checked",true);
+        // }else{
+        //     $(".checkboxCollection").prop("checked",false);
+        // }
+        $(".checkboxCollection").attr("checked",checkStatus)
+    })
+
+    //单选框数量影响全选框
+    $(".checkboxCollection").click(function () {
+        //获取选中的复选框的数量
+        var checkedNum = $(".checkboxCollection:checked").size();
+        //获取当前页的复选框数量
+        var totalNum = $(".checkboxCollection").size();
+        if(checkedNum == totalNum){
+            $("#AllCheckbox").prop("checked",true);
+        }else{
+            $("#AllCheckbox").prop("checked",false);
+        }
+
+    })
+
+    $("#deleteBatch").click(function () {
+        var checkNum = $(".checkboxCollection:checked").size();
+        $(".checkboxCollection:checked").each(function () {
+            
+        })
+
+    })
+
 
 </script>
 </body>
