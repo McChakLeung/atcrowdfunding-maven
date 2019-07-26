@@ -151,7 +151,7 @@
                     $.each(data,function(i,n){
                         content+='<tr>';
                         content+='  <td>'+(i+1)+'</td>';
-                        content+='  <td><input class="checkboxCollection" type="checkbox"></td>';
+                        content+='  <td><input class="checkboxCollection" value="'+n.id+'"  type="checkbox"></td>';
                         content+='  <td>'+n.loginacct+'</td>';
                         content+='  <td>'+n.username+'</td>';
                         content+='  <td>'+n.email+'</td>';
@@ -255,10 +255,39 @@
     })
 
     $("#deleteBatch").click(function () {
-        var checkNum = $(".checkboxCollection:checked").size();
-        $(".checkboxCollection:checked").each(function () {
-            
+        var selectedCheckbox = $(".checkboxCollection:checked");
+
+        var urlstr = "";
+        $.each(selectedCheckbox,function (i,n) {
+
+            if(i!=0){
+                urlstr += "&";
+            }
+            urlstr += "id=" + n.value;
         })
+
+        layer.confirm("确定要删除勾选的用户吗？",  {icon: 3, title:'提示'}, function(cindex){
+            layer.close(cindex);
+            $.ajax({
+                type:"post",
+                url:"${APP_PATH}/user/doDeleteBatch.do",
+                data:urlstr,
+                beforsend:function () {
+                    return false;
+                },
+                success:function (result) {
+                    if(result.success){
+                        window.location.href='${APP_PATH}/user/toIndex.do';
+                    }else{
+                        layer.msg(result.message,{time:2000, icon:5, shift:5});
+                    }
+                }
+
+            });
+
+        }, function(cindex){
+            layer.close(cindex);
+        });
 
     })
 
