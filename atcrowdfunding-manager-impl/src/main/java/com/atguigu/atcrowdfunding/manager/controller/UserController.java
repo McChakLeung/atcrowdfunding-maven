@@ -183,4 +183,25 @@ public class UserController {
         return result;
     }
 
+    /**
+     * 批量删除
+     * @return 返回查询结果集
+     */
+    @ResponseBody
+    @RequestMapping("/doDeleteBatch")
+    public Object doDeleteBatch(Integer[] ids){
+
+        AjaxResult result = new AjaxResult();
+
+        try{
+            Integer count = userService.deleteUserByBatch(ids);
+            result.setSuccess(count==ids.length);
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage("删除异常，请联系管理员处理");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

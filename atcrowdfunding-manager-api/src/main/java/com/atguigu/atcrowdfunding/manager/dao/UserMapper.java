@@ -39,4 +39,6 @@ public interface UserMapper {
     List<User> selectUserList(Map<String, Object> params);
 
     Integer selectCount(Map<String, Object> params);
+
+    Integer deleteUserByBatch(Integer[] ids);
 }

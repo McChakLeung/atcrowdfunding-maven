@@ -266,4 +266,12 @@
     <if test="queryText!=null">loginacct like concat("%",#{queryText},"%")</if>
   </where>
   </select>
+
+  <delete id="deleteUserByBatch" >
+    delete from t_user
+    where id IN
+    <foreach item="ids" collection="array" separator="," open="(" close=")" >
+      #{ids.id, jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>

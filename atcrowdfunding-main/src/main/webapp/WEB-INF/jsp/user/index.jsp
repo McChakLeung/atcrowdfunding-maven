@@ -151,7 +151,7 @@
                     $.each(data,function(i,n){
                         content+='<tr>';
                         content+='  <td>'+(i+1)+'</td>';
-                        content+='  <td><input class="checkboxCollection" value="'+n.id+'"  type="checkbox"></td>';
+                        content+='  <td><input class="checkboxCollection" id="'+n.id+'"  type="checkbox"></td>';
                         content+='  <td>'+n.loginacct+'</td>';
                         content+='  <td>'+n.username+'</td>';
                         content+='  <td>'+n.email+'</td>';
@@ -263,7 +263,7 @@
             if(i!=0){
                 urlstr += "&";
             }
-            urlstr += "id=" + n.value;
+            urlstr += "id=" + n.id;
         })
 
         layer.confirm("确定要删除勾选的用户吗？",  {icon: 3, title:'提示'}, function(cindex){
@@ -273,7 +273,7 @@
                 url:"${APP_PATH}/user/doDeleteBatch.do",
                 data:urlstr,
                 beforsend:function () {
-                    return false;
+                    return true;
                 },
                 success:function (result) {
                     if(result.success){
