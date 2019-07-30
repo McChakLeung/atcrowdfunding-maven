@@ -273,7 +273,7 @@
                 url:"${APP_PATH}/user/doDeleteBatch.do",
                 data:urlstr,
                 beforsend:function () {
-                    return true;
+                    return true
                 },
                 success:function (result) {
                     if(result.success){
