@@ -23,5 +23,5 @@ public interface UserService {
 
     Integer deleteUserById(Integer id);
 
-    Integer deleteUserByBatch(Integer[] ids);
+    Integer deleteUserByBatch(Integer[] id);
 }

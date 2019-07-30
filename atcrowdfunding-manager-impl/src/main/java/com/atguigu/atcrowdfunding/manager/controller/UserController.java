@@ -189,13 +189,13 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping("/doDeleteBatch")
-    public Object doDeleteBatch(Integer[] ids){
+    public Object doDeleteBatch(Integer[] id){
 
         AjaxResult result = new AjaxResult();
 
         try{
-            Integer count = userService.deleteUserByBatch(ids);
-            result.setSuccess(count==ids.length);
+            Integer count = userService.deleteUserByBatch(id);
+            result.setSuccess(count==id.length);
         }catch (Exception e){
             result.setSuccess(false);
             result.setMessage("删除异常，请联系管理员处理");
