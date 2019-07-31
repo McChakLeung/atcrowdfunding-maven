@@ -257,13 +257,21 @@
     $("#deleteBatch").click(function () {
         var selectedCheckbox = $(".checkboxCollection:checked");
 
-        var urlstr = "";
-        $.each(selectedCheckbox,function (i,n) {
+        // var urlstr = "";
+        // $.each(selectedCheckbox,function (i,n) {
+        //
+        //     if(i!=0){
+        //         urlstr += "&";
+        //     }
+        //     urlstr += "id=" + n.id;
+        // })
 
-            if(i!=0){
-                urlstr += "&";
-            }
-            urlstr += "id=" + n.id;
+        var jsonObj = new Array();
+        $.each(selectedCheckbox,function (i,n) {
+            alert(selectedCheckbox[i]);
+            // alert(selectedCheckbox[i].parents("tr").val());
+            // jsonObj.push({id:selectedCheckbox.attr("id")});
+            // jsonObj.push({loginacct:selectedCheckbox.parents("tr").val()})
         })
 
         layer.confirm("确定要删除勾选的用户吗？",  {icon: 3, title:'提示'}, function(cindex){
@@ -272,6 +280,7 @@
                 type:"post",
                 url:"${APP_PATH}/user/doDeleteBatch.do",
                 data:urlstr,
+                datatype:'json',
                 beforsend:function () {
                     return true
                 },
