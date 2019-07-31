@@ -90,12 +90,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer deleteUserByBatch(Integer[] ids) {
         //通过foreach循环的方式删除
-//        Integer totalcount = 0;
-//        for (Integer id: ids) {
-//            Integer count = userMapper.deleteByPrimaryKey(id);
-//            totalcount += count;
-//        }
+        Integer totalcount = 0;
+        for (Integer id: ids) {
+            Integer count = userMapper.deleteByPrimaryKey(id);
+            totalcount += count;
+        }
+        if(totalcount!=ids.length){
+            throw new RuntimeException("批量删除失败");
+        }
         //通过mybatis循环删除数据
-        return  userMapper.deleteUserByBatch(ids);
+        //return  userMapper.deleteUserByBatch(ids);
+        return totalcount;
     }
 }
