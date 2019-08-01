@@ -257,6 +257,10 @@
     $("#deleteBatch").click(function () {
         var selectedCheckbox = $(".checkboxCollection:checked");
 
+        if(selectedCheckbox.length<=0){
+            layer.msg("至少选择一条数据",{time:2000, icon:5, shift:5});
+            return false;
+        }
         // var urlstr = "";
         // $.each(selectedCheckbox,function (i,n) {
         //
@@ -267,20 +271,29 @@
         // })
 
         var jsonObj = new Array();
-        $.each(selectedCheckbox,function (i,n) {
-            alert(selectedCheckbox[i]);
-            // alert(selectedCheckbox[i].parents("tr").val());
-            // jsonObj.push({id:selectedCheckbox.attr("id")});
-            // jsonObj.push({loginacct:selectedCheckbox.parents("tr").val()})
+        $.each(selectedCheckbox,function () {
+            //alert($(this).attr('id'));
+            //alert($(this).parents("tr").find('td:eq(2)').text());
+            jsonObj.push({id:$(this).attr('id'),loginacct:$(this).parents("tr").find('td:eq(2)').text()});
+            // jsonObj["id"] = $(this).attr('id');
+            // jsonObj["loginacct"] = $(this).parents("tr").find('td:eq(2)').text();
+             console.log(jsonObj)
         })
+
+        // var json_str = JSON.stringify(jsonObj);
+        // var cc = jQuery.parseJSON(json_str);
+        // $.each(cc, function(index,item) {
+        //     alert(item)
+        // });
 
         layer.confirm("确定要删除勾选的用户吗？",  {icon: 3, title:'提示'}, function(cindex){
             layer.close(cindex);
             $.ajax({
                 type:"post",
                 url:"${APP_PATH}/user/doDeleteBatch.do",
-                data:urlstr,
+                data:JSON.stringify(jsonObj),
                 datatype:'json',
+                contentType : "application/json;charset=utf-8",
                 beforsend:function () {
                     return true
                 },

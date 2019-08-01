@@ -8,11 +8,13 @@ import com.atguigu.atcrowdfunding.util.Page;
 import com.atguigu.atcrowdfunding.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -187,15 +189,32 @@ public class UserController {
      * 批量删除
      * @return 返回查询结果集
      */
+//    @ResponseBody
+//    @RequestMapping("/doDeleteBatch")
+//    public Object doDeleteBatch(Integer[] id){
+//
+//        AjaxResult result = new AjaxResult();
+//
+//        try{
+//            Integer count = userService.deleteUserByBatch(id);
+//            result.setSuccess(count==id.length);
+//        }catch (Exception e){
+//            result.setSuccess(false);
+//            result.setMessage("删除异常，请联系管理员处理");
+//            e.printStackTrace();
+//        }
+//        return result;
+//    }
+
     @ResponseBody
     @RequestMapping("/doDeleteBatch")
-    public Object doDeleteBatch(Integer[] id){
+    public Object doDeleteBatch(@RequestBody List<User> userList){
 
         AjaxResult result = new AjaxResult();
 
         try{
-            Integer count = userService.deleteUserByBatch(id);
-            result.setSuccess(count==id.length);
+            Integer count = userService.deleteUserByBatch(userList);
+            result.setSuccess(count==userList.size());
         }catch (Exception e){
             result.setSuccess(false);
             result.setMessage("删除异常，请联系管理员处理");

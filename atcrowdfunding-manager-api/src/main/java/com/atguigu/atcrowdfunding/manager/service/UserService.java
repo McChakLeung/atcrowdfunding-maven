@@ -6,6 +6,7 @@ import javafx.beans.binding.ObjectExpression;
 import org.springframework.jdbc.support.nativejdbc.OracleJdbc4NativeJdbcExtractor;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public interface UserService {
@@ -23,5 +24,5 @@ public interface UserService {
 
     Integer deleteUserById(Integer id);
 
-    Integer deleteUserByBatch(Integer[] ids);
+    Integer deleteUserByBatch(List<User> userList);
 }
