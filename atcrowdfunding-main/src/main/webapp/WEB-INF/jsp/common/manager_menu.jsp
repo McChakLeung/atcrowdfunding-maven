@@ -12,7 +12,7 @@
             <li class="list-group-item tree-closed" >
                 <a href="main.html"><i class="glyphicon glyphicon-dashboard"></i> 控制面板</a>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item tree-closed">
                 <span><i class="glyphicon glyphicon glyphicon-tasks"></i> 权限管理 <span class="badge" style="float:right">3</span></span>
                 <ul style="margin-top:10px;">
                     <li style="height:30px;">

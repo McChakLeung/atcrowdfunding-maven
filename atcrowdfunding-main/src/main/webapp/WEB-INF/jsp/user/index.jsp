@@ -278,7 +278,7 @@
             // jsonObj["id"] = $(this).attr('id');
             // jsonObj["loginacct"] = $(this).parents("tr").find('td:eq(2)').text();
              console.log(jsonObj)
-        })
+        });
 
         // var json_str = JSON.stringify(jsonObj);
         // var cc = jQuery.parseJSON(json_str);
