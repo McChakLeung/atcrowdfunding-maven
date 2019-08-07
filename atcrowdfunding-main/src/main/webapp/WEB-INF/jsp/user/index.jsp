@@ -98,7 +98,7 @@
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
 <script src="${APP_PATH}/script/docs.min.js"></script>
 <script src="${APP_PATH}/jquery/layer/layer.js"></script>
-<script src="${APP_PATH}/script/common.js"></script>
+
 <script type="text/javascript">
     $(function () {
         $(".list-group-item").click(function(){
@@ -114,6 +114,7 @@
         queryPageUser(1);
         showMenu();
     });
+
     $("tbody .btn-success").click(function(){
         window.location.href = "assignRole.html";
     });
@@ -317,6 +318,7 @@
 
 
 </script>
+<script type="text/javascript" src="${APP_PATH}/script/common.js"></script>
 </body>
 </html>
 
