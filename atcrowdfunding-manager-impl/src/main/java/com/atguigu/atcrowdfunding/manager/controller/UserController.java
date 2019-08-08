@@ -223,4 +223,9 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping("/role")
+    public String role(){
+        return "user/role";
+    }
+
 }

@@ -112,7 +112,12 @@
             }
         });
         queryPageUser(1);
-        showMenu();
+        $(".list_href").click(function () {
+            //var currentRequestPath = $(this).attr("href");
+            //alert(currentRequestPath)
+            showMenu()
+        })
+
     });
 
     $("tbody .btn-success").click(function(){
