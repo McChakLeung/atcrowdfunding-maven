@@ -1,5 +1,6 @@
 package com.atguigu.atcrowdfunding.manager.dao;
 
+import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.bean.UserExample;
 import org.apache.ibatis.annotations.Param;
@@ -41,4 +42,8 @@ public interface UserMapper {
     Integer selectCount(Map<String, Object> params);
 
     Integer deleteUserByBatch(List<User> userList);
+
+    List<Integer> queryRoleById(Integer id);
+
+    List<Role> queryAllRole();
 }

@@ -1,5 +1,6 @@
 package com.atguigu.atcrowdfunding.manager.controller;
 
+import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +54,42 @@ public class UserController {
     @RequestMapping("/toAdd")
     public String toAdd(){
         return "user/add";
+    }
+
+    @RequestMapping("/role")
+    public String role(){
+        return "user/role";
+    }
+
+    /**
+     * 跳转页面并查询相关权限信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("/assignRole")
+    public String assignRole(Integer id,Map map){
+        //查询所有权限
+        List<Role> roleList = userService.queryAllRole();
+        //查询当前用户所有权限
+        List<Integer> ids = userService.queryRoleById(id);
+        //创建两个集合，分别存放已分配角色和未分配角色
+        List<Role> unAssignList = new ArrayList(); //未分配角色集合
+        List<Role> assignList = new ArrayList();  //已分配角色集合
+        //循环遍历
+        for(Role role:roleList){
+            //判断当前遍历出来的元素id是否包含在ids中，
+            // 如果包含，则将其放在assignList，
+            // 反之放在unassignList
+            if(ids.contains(role.getId())){
+                assignList.add(role);
+            }else{
+                unAssignList.add(role);
+            }
+        }
+        //将两个值存放在map中
+        map.put("assignList",assignList);
+        map.put("unAssignList",unAssignList);
+        return "user/assignRole";
     }
 
     /**
@@ -223,9 +261,6 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping("/role")
-    public String role(){
-        return "user/role";
-    }
+
 
 }

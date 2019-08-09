@@ -1,5 +1,6 @@
 package com.atguigu.atcrowdfunding.manager.service;
 
+import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.util.Page;
 import javafx.beans.binding.ObjectExpression;
@@ -25,4 +26,8 @@ public interface UserService {
     Integer deleteUserById(Integer id);
 
     Integer deleteUserByBatch(List<User> userList);
+
+    List<Role> queryAllRole();
+
+    List<Integer> queryRoleById(Integer id);
 }

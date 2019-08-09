@@ -1,5 +1,6 @@
 package com.atguigu.atcrowdfunding.manager.service.impl;
 
+import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.exception.LoginException;
 import com.atguigu.atcrowdfunding.manager.dao.UserMapper;
@@ -101,5 +102,15 @@ public class UserServiceImpl implements UserService {
         //通过mybatis循环删除数据
         return  userMapper.deleteUserByBatch(userList);
 //        return totalcount;
+    }
+
+    @Override
+    public List<Role> queryAllRole() {
+        return userMapper.queryAllRole();
+    }
+
+    @Override
+    public List<Integer> queryRoleById(Integer id) {
+        return userMapper.queryRoleById(id);
     }
 }

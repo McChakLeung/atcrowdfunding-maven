@@ -274,4 +274,13 @@
       #{user.id, jdbcType=INTEGER}
     </foreach>
   </delete>
+
+    <select id="queryAllRole" resultType="Role">
+        select id, name FROM t_role
+    </select>
+
+    <select id="queryRoleById" resultType="java.lang.Integer">
+        select roleid from t_user_role
+        where userid = #{id}
+    </select>
 </mapper>

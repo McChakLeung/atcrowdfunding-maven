@@ -98,7 +98,7 @@
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
 <script src="${APP_PATH}/script/docs.min.js"></script>
 <script src="${APP_PATH}/jquery/layer/layer.js"></script>
-
+<script type="text/javascript" src="${APP_PATH}/script/common.js"></script>
 <script type="text/javascript">
     $(function () {
         $(".list-group-item").click(function(){
@@ -164,8 +164,8 @@
                         content+='  <td>'+n.username+'</td>';
                         content+='  <td>'+n.email+'</td>';
                         content+='  <td>';
-                        content+='	  <button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
-                        content+='	  <button type="button" class="btn btn-primary btn-xs" onclick="toUpdate('+n.id+')"><i class=" glyphicon glyphicon-pencil"></i></button>';
+                        content+='	  <button type="button" class="btn btn-success btn-xs" onclick="window.location.href=\'${APP_PATH}/user/assignRole.htm?id='+n.id+'\'"><i class=" glyphicon glyphicon-check"></i></button>';
+                        content+='	  <button type="button" class="btn btn-primary btn-xs" onclick="toUpdate('+n.id+')"><i class=" glyphicon glyphicon-pencil"></i></buttod+n>';
                         content+='	  <button type="button" class="btn btn-danger btn-xs" onclick="deleteUser('+n.id+',\''+n.loginacct+'\')"><i class=" glyphicon glyphicon-remove"></i></button>';
                         content+='  </td>';
                         content+='</tr>';
@@ -323,7 +323,7 @@
 
 
 </script>
-<script type="text/javascript" src="${APP_PATH}/script/common.js"></script>
+
 </body>
 </html>
 
