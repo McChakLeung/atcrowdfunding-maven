@@ -3,6 +3,7 @@ package com.atguigu.atcrowdfunding.manager.dao;
 import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.bean.UserExample;
+import com.atguigu.atcrowdfunding.bean.UserRole;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -46,4 +47,8 @@ public interface UserMapper {
     List<Integer> queryRoleById(Integer id);
 
     List<Role> queryAllRole();
+
+    void saveUserRoleByBatch(List<UserRole> userRoleList);
+
+    void deleteUserRoleByBatch(List<UserRole> userRoleList);
 }

@@ -2,6 +2,7 @@ package com.atguigu.atcrowdfunding.manager.controller;
 
 import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.User;
+import com.atguigu.atcrowdfunding.bean.UserRole;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Const;
@@ -261,6 +262,36 @@ public class UserController {
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping("/doAssignRole")
+    public Object doAssignRole(@RequestBody List<UserRole> userRoleList){
+        AjaxResult result = new AjaxResult();
+        try{
+            userService.saveUserRoleByBatch(userRoleList);
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage("分配角色错误，重新分配");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/doUnAssignRole")
+    public Object doUnAssignRole(@RequestBody List<UserRole> userRoleList){
+        AjaxResult result = new AjaxResult();
+        try{
+            userService.deleteUserRoleByBatch(userRoleList);
+            result.setSuccess(true);
+        }catch (Exception e){
+            result.setSuccess(false);
+            result.setMessage("分配角色错误，重新分配");
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 
 }

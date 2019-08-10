@@ -52,7 +52,7 @@
                     <form role="form" class="form-inline">
                         <div class="form-group">
                             <label for="leftRoleList">未分配角色列表</label><br>
-                            <select id="leftRoleList" class="form-control" multiple size="10" style="width:100px;overflow-y:auto;">
+                            <select id="leftRoleList" class="form-control" multiple size="10" style="width:250px;overflow-y:auto;">
                                 <c:forEach items="${unAssignList}" var="role">
                                     <option value="${role.id}">${role.name}</option>
                                 </c:forEach>
@@ -67,7 +67,7 @@
                         </div>
                         <div class="form-group" style="margin-left:40px;">
                             <label for="rightRoleList">已分配角色列表</label><br>
-                            <select id="rightRoleList" class="form-control" multiple size="10" style="width:100px;overflow-y:auto;">
+                            <select id="rightRoleList" class="form-control" multiple size="10" style="width:250px;overflow-y:auto;">
                                 <c:forEach items="${assignList}" var="role">
                                     <option value="${role.id}">${role.name}</option>
                                 </c:forEach>
@@ -108,6 +108,7 @@
 <script src="${APP_PATH}/jquery/jquery-2.1.1.min.js"></script>
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
 <script src="${APP_PATH}/script/docs.min.js"></script>
+<script src="${APP_PATH}/jquery/layer/layer.js"></script>
 <script type="text/javascript" src="${APP_PATH}/script/common.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -127,14 +128,152 @@
             showMenu()
         })
 
-        $("#leftRoleBtn").click(function () {
-            var leftRoleList = $("#leftRoleList option:selected");
-            $("#rightRoleList").append(leftRoleList);
+        var loadingIndex = -1;
+
+        //定义传入到后台的json类型参数，其中包含userid和roleid
+        <%--var jsonObj = {--%>
+            <%--userid: "${param.id}"--%>
+        <%--}--%>
+
+        var jsonObj = new Array();
+
+        //为左边select添加双击事件，将单个option添加到右边的select中
+        $("#leftRoleList").delegate("option","dblclick",function () {
+            var leftOption = $(this);
+
+            jsonObj.push({userid:"${param.id}", roleid: leftOption.val()})
+
+            //发送ajax添加功能
+            $.ajax({
+                type:"post",
+                data:JSON.stringify(jsonObj),
+                url:"${APP_PATH}/user/doAssignRole.do",
+                datatype:'json',
+                contentType : "application/json;charset=utf-8",
+                beforSend: function(){
+                    loadingIndex = layer.load(3, {time: 10*1000});
+                    return false;
+                },
+                success: function (result) {
+                    layer.close(loadingIndex);
+                    if(result.success){
+                        $("#rightRoleList").append(leftOption);
+                    }else{
+                        layer.msg(result.message,{time:2000, icon:5, shift:5})
+                    }
+                },
+                error:function () {
+                    layer.msg("分配角色失败，请联系管理员处理",{time:2000, icon:5, shift:5})
+                }
+            })
+
         })
 
+        //leftRoleBtn单击事件
+        $("#leftRoleBtn").click(function () {
+            var leftRoleList = $("#leftRoleList option:selected");
+
+            //遍历leftRoleListDOM对象，并将其中的roleid组装到jsonObj中
+            // $.each(leftRoleList,function (i,n) {
+            //     jsonObj["ids["+i+"]"] = this.value;
+            // })
+            //console.log(jsonObj)
+
+            //遍历leftRoleListDOM对象，并将其中的roleid组装到jsonObj中
+            $.each(leftRoleList,function (i,n) {
+                jsonObj.push({userid: "${param.id}", roleid: this.value})
+            })
+
+
+            //发送ajax添加功能
+            $.ajax({
+                type:"post",
+                data:JSON.stringify(jsonObj),
+                url:"${APP_PATH}/user/doAssignRole.do",
+                datatype:'json',
+                contentType : "application/json;charset=utf-8",
+                beforSend: function(){
+                    loadingIndex = layer.load(3, {time: 10*1000});
+                    return false;
+                },
+                success: function (result) {
+                    layer.close(loadingIndex);
+                    if(result.success){
+                        $("#rightRoleList").append(leftRoleList);
+                    }else{
+                        layer.msg(result.message,{time:2000, icon:5, shift:5})
+                    }
+                },
+                error:function () {
+                    layer.msg("分配角色失败，请联系管理员处理",{time:2000, icon:5, shift:5})
+                }
+            })
+        })
+
+        //为右边select添加双击事件，将单个option添加到左边的select中
+        $("#rightRoleList").delegate("option","dblclick",function () {
+            var rightOption = $(this);
+
+            jsonObj.push({userid:"${param.id}", roleid: rightOption.val()})
+
+            //发送ajax添加功能
+            $.ajax({
+                type:"post",
+                data:JSON.stringify(jsonObj),
+                url:"${APP_PATH}/user/doUnAssignRole.do",
+                datatype:'json',
+                contentType : "application/json;charset=utf-8",
+                beforSend: function(){
+                    loadingIndex = layer.load(3, {time: 10*1000});
+                    return false;
+                },
+                success: function (result) {
+                    layer.close(loadingIndex);
+                    if(result.success){
+                        $("#leftRoleList").append(rightOption);
+                    }else{
+                        layer.msg(result.message,{time:2000, icon:5, shift:5})
+                    }
+                },
+                error:function () {
+                    layer.msg("分配角色失败，请联系管理员处理",{time:2000, icon:5, shift:5})
+                }
+            })
+
+        })
+
+        //rightRoleBtn单击事件
         $("#rightRoleBtn").click(function () {
             var rightRoleList = $("#rightRoleList option:selected");
-            $("#leftRoleList").append(rightRoleList);
+            //遍历leftRoleListDOM对象，并将其中的roleid组装到jsonObj中
+            $.each(rightRoleList,function (i,n) {
+                jsonObj.push({userid: "${param.id}", roleid: this.value})
+            })
+            console.log(jsonObj)
+
+            //发送ajax添加功能
+            $.ajax({
+                type:"post",
+                data:JSON.stringify(jsonObj),
+                url:"${APP_PATH}/user/doUnAssignRole.do",
+                datatype:'json',
+                contentType : "application/json;charset=utf-8",
+                beforSend: function(){
+                    loadingIndex = layer.load(3, {time: 10*1000});
+                    return false;
+                },
+                success: function (result) {
+                    layer.close(loadingIndex);
+                    if(result.success){
+                        $("#leftRoleList").append(rightRoleList);
+                    }else{
+                        layer.msg(result.message,{time:2000, icon:5, shift:5})
+                    }
+                },
+                error:function () {
+                    layer.msg("删除角色失败，请联系管理员处理",{time:2000, icon:5, shift:5})
+                }
+            })
         })
     });
 </script>

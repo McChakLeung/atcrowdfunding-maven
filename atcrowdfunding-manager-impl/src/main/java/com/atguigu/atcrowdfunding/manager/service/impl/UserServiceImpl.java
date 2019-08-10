@@ -2,6 +2,7 @@ package com.atguigu.atcrowdfunding.manager.service.impl;
 
 import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.User;
+import com.atguigu.atcrowdfunding.bean.UserRole;
 import com.atguigu.atcrowdfunding.exception.LoginException;
 import com.atguigu.atcrowdfunding.manager.dao.UserMapper;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
@@ -112,5 +113,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Integer> queryRoleById(Integer id) {
         return userMapper.queryRoleById(id);
+    }
+
+    @Override
+    public void saveUserRoleByBatch(List<UserRole> userRoleList) {
+        userMapper.saveUserRoleByBatch(userRoleList);
+    }
+
+    @Override
+    public void deleteUserRoleByBatch(List<UserRole> userRoleList) {
+        userMapper.deleteUserRoleByBatch(userRoleList);
     }
 }

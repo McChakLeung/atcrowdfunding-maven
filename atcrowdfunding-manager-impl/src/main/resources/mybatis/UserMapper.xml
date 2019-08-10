@@ -283,4 +283,17 @@
         select roleid from t_user_role
         where userid = #{id}
     </select>
+
+  <insert id="saveUserRoleByBatch">
+    <foreach collection="list" item="userrole" separator=";">
+      INSERT INTO t_user_role (userid,roleid) values(#{userrole.userid},#{userrole.roleid})
+    </foreach>
+  </insert>
+
+  <delete id="deleteUserRoleByBatch">
+    DELETE from t_user_role where roleid in
+    <foreach collection="list" item="userrole" separator="," open="(" close=")">
+      #{userrole.roleid, jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>
