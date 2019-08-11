@@ -1,5 +1,7 @@
 package com.atguigu.atcrowdfunding.bean;
 
+import java.util.List;
+
 public class Permission {
     private Integer id;
 
@@ -10,6 +12,16 @@ public class Permission {
     private String icon;
 
     private String url;
+
+    private List<Permission> childrenList;
+
+    public List<Permission> getChildrenList() {
+        return childrenList;
+    }
+
+    public void setChildrenList(List<Permission> childrenList) {
+        this.childrenList = childrenList;
+    }
 
     public Integer getId() {
         return id;
