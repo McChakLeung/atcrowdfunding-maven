@@ -8,6 +8,16 @@ public class AjaxResult {
 
     private Page page;
 
+    public Object getDatas() {
+        return datas;
+    }
+
+    public void setDatas(Object datas) {
+        this.datas = datas;
+    }
+
+    private Object datas;
+
     public Page getPage() {
         return page;
     }

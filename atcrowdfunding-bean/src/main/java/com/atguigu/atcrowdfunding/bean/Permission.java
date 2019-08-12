@@ -1,5 +1,6 @@
 package com.atguigu.atcrowdfunding.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Permission {
@@ -13,14 +14,24 @@ public class Permission {
 
     private String url;
 
-    private List<Permission> childrenList;
+    private boolean open;
 
-    public List<Permission> getChildrenList() {
-        return childrenList;
+    private List<Permission> children = new ArrayList<Permission>();
+
+    public boolean isOpen() {
+        return open;
     }
 
-    public void setChildrenList(List<Permission> childrenList) {
-        this.childrenList = childrenList;
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+
+    public List<Permission> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Permission> children) {
+        this.children = children;
     }
 
     public Integer getId() {

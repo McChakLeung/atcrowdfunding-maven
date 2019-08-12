@@ -1,0 +1,66 @@
+package com.atguigu.atcrowdfunding.manager.controller;
+
+import com.atguigu.atcrowdfunding.bean.Permission;
+import com.atguigu.atcrowdfunding.manager.service.PermissionService;
+import com.atguigu.atcrowdfunding.util.AjaxResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Controller
+@RequestMapping("/permission")
+public class PermissionController {
+
+    @Autowired
+    private PermissionService permissionService;
+
+    @RequestMapping("/index")
+    public String index(){
+        return "/permission/index";
+    }
+
+    @ResponseBody
+    @RequestMapping("/loadData")
+    public Object loadData(){
+
+        AjaxResult result = new AjaxResult();
+
+        try{
+
+            //设置父节点list
+            List<Permission> root = new ArrayList();
+
+            //设置父节点
+            Permission parent = new Permission();
+            parent.setName("系统根节点");
+            parent.setOpen(true);
+            root.add(parent);
+
+            //设置子节点
+            //设置一个childrenList集合，用于接收子节点
+            List<Permission> childrenList = new ArrayList();
+            Permission child1 = new Permission();
+            child1.setName("子节点1");
+            Permission child2 = new Permission();
+            child2.setName("子节点2");
+
+            //设置关联关系
+            childrenList.add(child1);
+            childrenList.add(child2);
+            parent.setChildren(childrenList);
+
+            result.setDatas(root);
+
+            result.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("加载许可树失败");
+        }
+        return result;
+    }
+}
