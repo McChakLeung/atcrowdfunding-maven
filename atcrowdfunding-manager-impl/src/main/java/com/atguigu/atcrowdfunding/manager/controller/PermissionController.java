@@ -23,6 +23,10 @@ public class PermissionController {
         return "/permission/index";
     }
 
+    /**
+     * Demo3 -- 数据库交互：实现三级菜单加载
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/loadData")
     public Object loadData(){
@@ -30,31 +34,35 @@ public class PermissionController {
         AjaxResult result = new AjaxResult();
 
         try{
-
             //设置父节点list
             List<Permission> root = new ArrayList();
 
-            //设置父节点
-            Permission parent = new Permission();
-            parent.setName("系统根节点");
-            parent.setOpen(true);
+            //查询数据库父节点
+            Permission parent = permissionService.queryParentPermission();
             root.add(parent);
 
-            //设置子节点
-            //设置一个childrenList集合，用于接收子节点
-            List<Permission> childrenList = new ArrayList();
-            Permission child1 = new Permission();
-            child1.setName("子节点1");
-            Permission child2 = new Permission();
-            child2.setName("子节点2");
-
-            //设置关联关系
-            childrenList.add(child1);
-            childrenList.add(child2);
+            //设置一个childrenList集合，用于接收从数据库中查询的子节点
+            List<Permission> childrenList = permissionService.queryPermissionByParenetID(parent.getId());
             parent.setChildren(childrenList);
 
-            result.setDatas(root);
+            //遍历子节点(foreach循环）
+            for (Permission children: childrenList) {
+                List<Permission> sonList = permissionService.queryPermissionByParenetID(children.getId());
+                children.setChildren(sonList);
+            }
 
+//            //遍历子节点
+//            Permission child1 = new Permission();
+//            child1.setName("子节点1");
+//            Permission child2 = new Permission();
+//            child2.setName("子节点2");
+//
+//            //设置关联关系
+//            childrenList.add(child1);
+//            childrenList.add(child2);
+//            parent.setChildren(childrenList);
+
+            result.setDatas(root);
             result.setSuccess(true);
         }catch (Exception e){
             e.printStackTrace();
@@ -63,4 +71,46 @@ public class PermissionController {
         }
         return result;
     }
+
+    //Demo1 -- 无数据库交互（模拟实现）
+//    @ResponseBody
+//    @RequestMapping("/loadData")
+//    public Object loadData(){
+//
+//        AjaxResult result = new AjaxResult();
+//
+//        try{
+//
+//            //设置父节点list
+//            List<Permission> root = new ArrayList();
+//
+//            //设置父节点
+//            Permission parent = new Permission();
+//            parent.setName("系统根节点");
+//            parent.setOpen(true);
+//            root.add(parent);
+//
+//            //设置子节点
+//            //设置一个childrenList集合，用于接收子节点
+//            List<Permission> childrenList = new ArrayList();
+//            Permission child1 = new Permission();
+//            child1.setName("子节点1");
+//            Permission child2 = new Permission();
+//            child2.setName("子节点2");
+//
+//            //设置关联关系
+//            childrenList.add(child1);
+//            childrenList.add(child2);
+//            parent.setChildren(childrenList);
+//
+//            result.setDatas(root);
+//
+//            result.setSuccess(true);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            result.setSuccess(false);
+//            result.setMessage("加载许可树失败");
+//        }
+//        return result;
+//    }
 }
