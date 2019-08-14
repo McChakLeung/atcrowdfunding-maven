@@ -221,4 +221,9 @@
     FROM t_permission
     WHERE pid = #{id}
   </select>
+  <select id="selectAllPermission" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    FROM t_permission
+  </select>
 </mapper>

@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/permission")
@@ -24,16 +26,10 @@ public class PermissionController {
     }
 
     /**
-     * Demo3 -- 数据库交互：递归调用
+     * Demo5 -- 数据库交互：优化循环嵌套（使用map）
      *
-     * 递归：
-     * 1.基准条件
-     * 2.范围逐渐缩小
-     * 3.调用自身函数
-     *
-     * 缺点：
-     * 1.多次查询数据库，数据库压力大
-     * 2.递归调用会在内存栈区压栈，容易造成内存溢出
+     * map与list的区别：map的key键是可以任意指定的，可以指定对象的id值，
+     * 而list集合的get()方法是按集合的先后顺序查找数据，值相对固定，所以无法使用list集合实现该功能
      *
      * @return
      */
@@ -41,18 +37,38 @@ public class PermissionController {
     @RequestMapping("/loadData")
     public Object loadData(){
 
+        long startTime = System.currentTimeMillis();
+
         AjaxResult result = new AjaxResult();
 
         try{
+
+            //一次性从数据库中查询所有的数据
+            List<Permission> permissionList = permissionService.selectAllPermission();
+
             //设置父节点list
             List<Permission> root = new ArrayList();
 
-            //查询数据库父节点
-            Permission parent = permissionService.queryParentPermission();
-            root.add(parent);
+            //创建一个map集合
+            Map<Integer,Permission> map = new HashMap<>();
 
-            //设置一个childrenList集合，用于接收从数据库中查询的子节点
-            queryChildrenPerminssion(parent);
+            //提前遍历内层循环
+            for(Permission innerPermission : permissionList){
+                map.put(innerPermission.getId(),innerPermission);
+            }
+
+            //循环遍历
+
+            for(Permission permission : permissionList){
+
+                //判断当前对象是否为根节点
+                if(permission.getPid() == null){
+                    root.add(permission);
+                }else{
+                    Permission parent = map.get(permission.getPid());
+                    parent.getChildren().add(permission);
+                }
+            }
 
             result.setDatas(root);
             result.setSuccess(true);
@@ -61,18 +77,172 @@ public class PermissionController {
             result.setSuccess(false);
             result.setMessage("加载许可树失败");
         }
+
+        long endTime = System.currentTimeMillis();
+
+        System.out.println(endTime - startTime);
+
         return result;
+
     }
 
-    private void queryChildrenPerminssion(Permission parent){
-        List<Permission> childrenList = permissionService.queryPermissionByParenetID(parent.getId());
-        parent.setChildren(childrenList);
 
-        //遍历子节点(foreach循环）
-        for (Permission children: childrenList) {
-            queryChildrenPerminssion(children);
-        }
-    }
+//    /**
+//     * Demo5 -- 数据库交互：优化循环嵌套（使用list）(失败）
+//     *
+//     * @return
+//     */
+//    @ResponseBody
+//    @RequestMapping("/loadData")
+//    public Object loadData(){
+//
+//        long startTime = System.currentTimeMillis();
+//
+//        AjaxResult result = new AjaxResult();
+//
+//        try{
+//
+//            //一次性从数据库中查询所有的数据
+//            List<Permission> permissionList = permissionService.selectAllPermission();
+//
+//            //设置父节点list
+//            List<Permission> root = new ArrayList();
+//
+////            //提前遍历内层循环
+////            for(Permission innerPermission : permissionList){
+////
+////            }
+//
+//            //循环遍历
+//
+//            for(Permission permission : permissionList){
+//
+//                //判断当前对象是否为根节点
+//                if(permission.getPid() == null){
+//                    root.add(permission);
+//                }else{
+//                    Permission parent = permissionList.get(permission.getPid());
+//                    parent.getChildren().add(permission);
+//                }
+//            }
+//
+//            result.setDatas(root);
+//            result.setSuccess(true);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            result.setSuccess(false);
+//            result.setMessage("加载许可树失败");
+//        }
+//
+//        long endTime = System.currentTimeMillis();
+//
+//        System.out.println(endTime - startTime);
+//
+//        return result;
+//
+//    }
+
+//    /**
+//     * Demo4 -- 数据库交互：一次性从数据库读取所有数据
+//     *
+//     * @return
+//     */
+//    @ResponseBody
+//    @RequestMapping("/loadData")
+//    public Object loadData(){
+//
+//        AjaxResult result = new AjaxResult();
+//
+//        try{
+//
+//            //一次性从数据库中查询所有的数据
+//            List<Permission> permissionList = permissionService.selectAllPermission();
+//
+//            //设置父节点list
+//            List<Permission> root = new ArrayList();
+//
+//            //遍历查出来的数据，进行相关逻辑处理
+//            for(Permission permission:permissionList){
+//                //假定所有的节点都是子节点
+//                //Permission child = permission;
+//                //如果遍历的出的对象的pid值为null，则说明是根节点
+//                if(permission.getPid() == null){
+//                    root.add(permission);
+//                }else{
+//                    for(Permission innerChildren: permissionList){
+//                        if(permission.getPid() == innerChildren.getId()){
+//                            innerChildren.getChildren().add(permission);
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            result.setDatas(root);
+//            result.setSuccess(true);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            result.setSuccess(false);
+//            result.setMessage("加载许可树失败");
+//        }
+//        return result;
+//    }
+
+
+//    /**
+//     * Demo3 -- 数据库交互：递归调用
+//     *
+//     * 递归：
+//     * 1.基准条件
+//     * 2.范围逐渐缩小
+//     * 3.调用自身函数
+//     *
+//     * 缺点：
+//     * 1.多次查询数据库，数据库压力大
+//     * 2.递归调用会在内存栈区压栈，容易造成内存溢出
+//     *
+//     * @return
+//     */
+//    @ResponseBody
+//    @RequestMapping("/loadData")
+//    public Object loadData(){
+//
+//        AjaxResult result = new AjaxResult();
+//
+//        try{
+//            //设置父节点list
+//            List<Permission> root = new ArrayList();
+//
+//            //查询数据库父节点
+//            Permission parent = permissionService.queryParentPermission();
+//            root.add(parent);
+//
+//            //设置一个childrenList集合，用于接收从数据库中查询的子节点
+//            queryChildrenPerminssion(parent);
+//
+//            result.setDatas(root);
+//            result.setSuccess(true);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            result.setSuccess(false);
+//            result.setMessage("加载许可树失败");
+//        }
+//        return result;
+//    }
+
+//    /**
+//     * 递归方法
+//     * @param parent
+//     */
+//    private void queryChildrenPerminssion(Permission parent){
+//        List<Permission> childrenList = permissionService.queryPermissionByParenetID(parent.getId());
+//        parent.setChildren(childrenList);
+//
+//        //遍历子节点(foreach循环）
+//        for (Permission children: childrenList) {
+//            queryChildrenPerminssion(children);
+//        }
+//    }
 
 //    /**
 //     * Demo2-- 数据库交互：实现三级菜单加载

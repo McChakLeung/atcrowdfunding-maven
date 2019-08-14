@@ -8,4 +8,6 @@ public interface PermissionService {
     Permission queryParentPermission();
 
     List<Permission> queryPermissionByParenetID(Integer id);
+
+    List<Permission> selectAllPermission();
 }

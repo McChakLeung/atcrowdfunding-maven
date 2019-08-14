@@ -32,4 +32,6 @@ public interface PermissionMapper {
     Permission queryParentPermission();
 
     List<Permission> queryPermissionByParenetID(Integer id);
+
+    List<Permission> selectAllPermission();
 }
