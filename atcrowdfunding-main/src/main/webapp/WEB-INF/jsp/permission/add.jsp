@@ -61,11 +61,8 @@
                         <div class="form-group">
                             <label for="ficon">许可图标</label>
                             <select class="form-control" id="ficon">
-                                <option value="qa"><span  class="glyphicon glyphicon-th-list">glyphicon glyphicon-th-list</span></option>
-                                <option value="qc">QC</option>
-                                <option value="pg">PG</option>
+                                <option value=""></option>
                             </select>
-                            <span  class="glyphicon glyphicon-th-list">glyphicon glyphicon-th-list</span>
                         </div>
                         <button type="button" id="addbtn" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
                         <button type="button" class="btn btn-danger" id="resetBtn"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
@@ -117,7 +114,36 @@
                 }
             }
         });
+        loadIcon();
     });
+
+    //在页面加载的时候加载icon数据
+    function loadIcon() {
+
+        //将icon下拉列表原来的option移除
+        $("#ficon>option").remove();
+
+        $.ajax({
+            url:"${APP_PATH}/loadIcon.do",
+            type:"post",
+            dataType: "json",
+            success:function (result) {
+                if(result.success){
+                    $.each(result.datas,function (index,value) {
+                        var $dataOption = $("<option></option>");
+                        $dataOption.val(value.id);
+                        $dataOption.text(value.iconName);
+                        $dataOption.appendTo($("#ficon"));
+                    })
+                }else{
+                    layer.msg(result.message,{time:2000, icon:5, shift:5})
+                }
+
+            }
+
+
+        })
+    }
 
     $("#addbtn").click(function () {
 

@@ -1,6 +1,8 @@
 package com.atguigu.atcrowdfunding.manager.controller;
 
+import com.atguigu.atcrowdfunding.bean.Glyphicon;
 import com.atguigu.atcrowdfunding.bean.Permission;
+import com.atguigu.atcrowdfunding.manager.service.GlyphiconService;
 import com.atguigu.atcrowdfunding.manager.service.PermissionService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
+
+
     @RequestMapping("/index")
     public String index(){
         return "/permission/index";
@@ -29,6 +33,9 @@ public class PermissionController {
     public String toAdd(){
         return "/permission/add";
     }
+
+
+
 
     /**
      * Demo5 -- 数据库交互：优化循环嵌套（使用map）
