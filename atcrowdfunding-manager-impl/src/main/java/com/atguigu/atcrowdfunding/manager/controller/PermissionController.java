@@ -25,6 +25,11 @@ public class PermissionController {
         return "/permission/index";
     }
 
+    @RequestMapping("/toAdd")
+    public String toAdd(){
+        return "/permission/add";
+    }
+
     /**
      * Demo5 -- 数据库交互：优化循环嵌套（使用map）
      *
