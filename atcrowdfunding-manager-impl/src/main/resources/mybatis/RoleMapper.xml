@@ -162,10 +162,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="queryRoleListByParams" parameterType="java.util.Map" resultType="java.util.list">
+  <select id="queryRoleListByParams" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_role
-    limit #{pageno}-1,#{pagesize}
+    limit #{startline},#{pagesize}
   </select>
 </mapper>
