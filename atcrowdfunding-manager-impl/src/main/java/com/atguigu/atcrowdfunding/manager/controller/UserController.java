@@ -57,10 +57,6 @@ public class UserController {
         return "user/add";
     }
 
-    @RequestMapping("/role")
-    public String role(){
-        return "user/role";
-    }
 
     /**
      * 跳转页面并查询相关权限信息

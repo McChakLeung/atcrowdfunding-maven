@@ -28,4 +28,24 @@ public class PermissionServiceImpl implements PermissionService {
     public List<Permission> selectAllPermission() {
         return permissionMapper.selectAllPermission();
     }
+
+    @Override
+    public int insert(Permission permission) {
+        return permissionMapper.insert(permission);
+    }
+
+    @Override
+    public Permission selectByPrimaryKey(Integer id) {
+        return permissionMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(Permission permission) {
+        return permissionMapper.updateByPrimaryKeySelective(permission);
+    }
+
+    @Override
+    public int deletePermission(Integer id) {
+        return permissionMapper.deleteByPrimaryKey(id);
+    }
 }

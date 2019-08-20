@@ -52,19 +52,19 @@
                     <form id="form">
                         <div class="form-group">
                             <label for="fname">许可名称</label>
-                            <input type="text" class="form-control" id="fname" placeholder="请输入许可名称">
+                            <input type="text" class="form-control" id="fname" placeholder="请输入许可名称" value="${requestScope.permission.name}">
                         </div>
                         <div class="form-group">
                             <label for="furl">许可地址</label>
-                            <input type="text" class="form-control" id="furl" placeholder="请输入许可地址">
+                            <input type="text" class="form-control" id="furl" placeholder="请输入许可地址" value="${requestScope.permission.url}">
                         </div>
                         <div class="form-group">
                             <label for="ficon">许可图标</label>
                             <select class="form-control" id="ficon">
-                                <option value="0">请选择</option>
+                                <option value="">${requestScope.permission.icon}</option>
                             </select>
                         </div>
-                        <button type="button" id="addbtn" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> 新增</button>
+                        <button type="button" id="updatebtn" class="btn btn-primary"><i class="glyphicon glyphicon-edit"></i> 修改</button>
                         <button type="button" class="btn btn-danger" id="resetBtn"><i class="glyphicon glyphicon-refresh"></i> 重置</button>
                     </form>
                 </div>
@@ -147,7 +147,7 @@
         })
     }
 
-    $("#addbtn").click(function () {
+    $("#updatebtn").click(function () {
 
         //获取表单提交的数据
         var fname = $("#fname");
@@ -158,9 +158,9 @@
         //异步请求
         $.ajax({
             type:"post",
-            url:"${APP_PATH}/permission/doAdd.do",
+            url:"${APP_PATH}/permission/doUpdate.do",
             data:{
-                pid:"${param.id}",
+                id:"${param.id}",
                 name:fname.val(),
                 url:furl.val(),
                 icon:ficon.text()

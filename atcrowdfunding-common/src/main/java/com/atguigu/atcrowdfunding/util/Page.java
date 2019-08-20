@@ -2,7 +2,7 @@ package com.atguigu.atcrowdfunding.util;
 
 import java.util.List;
 
-public class Page<User> {
+public class Page<Object> {
 
     private List datalist;
 

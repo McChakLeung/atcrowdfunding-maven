@@ -5,6 +5,7 @@ import com.atguigu.atcrowdfunding.bean.RoleExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RoleMapper {
     long countByExample(RoleExample example);
@@ -28,4 +29,6 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+
+    List<Role> queryRoleListByParams(Map<String, Object> params);
 }

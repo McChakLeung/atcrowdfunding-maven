@@ -161,4 +161,11 @@
     set name = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="queryRoleListByParams" parameterType="java.util.Map" resultType="java.util.list">
+    select
+    <include refid="Base_Column_List" />
+    from t_role
+    limit #{pageno}-1,#{pagesize}
+  </select>
 </mapper>

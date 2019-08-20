@@ -22,8 +22,6 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
-
-
     @RequestMapping("/index")
     public String index(){
         return "/permission/index";
@@ -34,8 +32,68 @@ public class PermissionController {
         return "/permission/add";
     }
 
+    @RequestMapping("/toUpdate")
+    public String toUpdate(Integer id, Map map){
+        Permission permission = permissionService.selectByPrimaryKey(id);
+        map.put("permission",permission);
+        return "/permission/update";
+    }
+
+    @ResponseBody
+    @RequestMapping("/doUpdate")
+    public Object doUpdate(Permission permission){
+        AjaxResult result = new AjaxResult();
+
+        try{
+            int count = permissionService.updateByPrimaryKeySelective(permission);
+            result.setSuccess(count>0);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("更新许可树失败");
+        }
+
+        return result;
+
+    }
 
 
+    @ResponseBody
+    @RequestMapping("/doAdd")
+    public Object doAdd(Integer pid, Permission permission){
+        AjaxResult result = new AjaxResult();
+
+        try{
+            permission.setPid(pid);
+            int count = permissionService.insert(permission);
+            result.setSuccess(count>0);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("添加许可树失败");
+        }
+
+        return result;
+
+    }
+
+    @ResponseBody
+    @RequestMapping("/deletePermission")
+    public Object deletePermission(Integer id){
+        AjaxResult result = new AjaxResult();
+
+        try{
+            int count = permissionService.deletePermission(id);
+            result.setSuccess(count>0);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("删除许可树失败");
+        }
+
+        return result;
+
+    }
 
     /**
      * Demo5 -- 数据库交互：优化循环嵌套（使用map）

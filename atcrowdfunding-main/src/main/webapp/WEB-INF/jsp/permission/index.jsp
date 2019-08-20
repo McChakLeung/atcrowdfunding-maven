@@ -106,7 +106,11 @@
                 }
             }
         });
+        loadData();
 
+    });
+
+    function loadData() {
         var setting = {
 
             view: {
@@ -136,16 +140,16 @@
 
                     //判断是否为根节点
                     if(treeNode.level == 0){
-                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" onclick="window.location.href=\'${APP_PATH}/permission/toAdd.htm\'" title="添加权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
+                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" onclick="window.location.href=\'${APP_PATH}/permission/toAdd.htm?id='+treeNode.id+'\'" title="添加权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
                         //判断是否为子节点，该节点可以添加，修改和删除
                     }else if(treeNode.children.length == 0){
-                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;"  href="#" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
-                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" title="删除权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-times rbg "></i></a>';
-                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" title="添加权限信息" >&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
+                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;"  href="#" onclick="window.location.href=\'${APP_PATH}/permission/toUpdate.htm?id='+treeNode.id+'\'" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
+                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;"  href="#" onclick="deletePermission('+treeNode.id+',\''+treeNode.name+'\')" title="删除权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-times rbg "></i></a>';
+                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" onclick="window.location.href=\'${APP_PATH}/permission/toAdd.htm?id='+treeNode.id+'\'" title="添加权限信息" >&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
                         //判断其他节点，该节点只有修改和添加权限，不能删除
                     }else{
-                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;"  href="#" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
-                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" title="添加权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
+                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;"  href="#" onclick="window.location.href=\'${APP_PATH}/permission/toUpdate.htm?id='+treeNode.id+'\'" title="修改权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-edit rbg "></i></a>';
+                        s += '<a class="btn btn-info dropdown-toggle btn-xs" style="margin-left:10px;padding-top:0px;" href="#" onclick="window.location.href=\'${APP_PATH}/permission/toAdd.htm?id='+treeNode.id+'\'" title="添加权限信息">&nbsp;&nbsp;<i class="fa fa-fw fa-plus rbg "></i></a>';
                     }
 
                     s += '</span>';
@@ -165,11 +169,36 @@
                     var zNodes = result.datas;
                     $.fn.zTree.init($("#treeDemo"), setting, zNodes);
                 }else{
-                    alert("加载许可树数据失败");
+                    layer.msg("加载许可树数据失败...", {time:1000, icon:5, shift:6});
                 }
             }
         })
-    });
+    }
+
+    function deletePermission(id,name) {
+        layer.confirm("确认要删除["+name+"]这条数据吗？",  {icon: 3, title:'提示'}, function(cindex){
+            layer.close(cindex);
+            $.ajax({
+                type:"post",
+                url:"${APP_PATH}/permission/deletePermission.do",
+                data:{
+                    id:id
+                },
+                beforeSend: function () {
+                    return true;
+                },
+                success:function (result) {
+                    if(result.success){
+                        loadData();
+                    }else{
+                        layer.msg("删除许可数据失败...", {time:1000, icon:5, shift:6});
+                    }
+                }
+            })
+        }, function(cindex){
+            layer.close(cindex);
+        });
+    }
 
 
 
