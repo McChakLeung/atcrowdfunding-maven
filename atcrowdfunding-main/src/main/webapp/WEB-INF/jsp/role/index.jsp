@@ -240,7 +240,7 @@
                         content += '<td><input type="checkbox" id="'+n.id+'"></td>';
                         content += '<td>'+n.name+'</td>';
                         content += '<td>';
-                        content += '<button type="button" class="btn btn-success btn-xs"><i class=" glyphicon glyphicon-check"></i></button>';
+                        content += '<button type="button" class="btn btn-success btn-xs" onclick="window.location.href=\'${APP_PATH}/role/toAssignPermission.htm?roleId='+n.id+'\'"><i class=" glyphicon glyphicon-check"></i></button>';
                         content += '<button type="button" class="btn btn-primary btn-xs"><i class=" glyphicon glyphicon-pencil"></i></button>';
                         content += '<button type="button" class="btn btn-danger btn-xs"><i class=" glyphicon glyphicon-remove"></i></button>';
                         content += '</td>';

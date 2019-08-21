@@ -14,7 +14,7 @@ public class Permission {
 
     private String url;
 
-    private boolean open = true;
+    private boolean open = false;
 
     private List<Permission> children = new ArrayList<Permission>();
 

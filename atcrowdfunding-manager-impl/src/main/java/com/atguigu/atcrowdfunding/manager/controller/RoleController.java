@@ -1,6 +1,8 @@
 package com.atguigu.atcrowdfunding.manager.controller;
 
+import com.atguigu.atcrowdfunding.bean.Permission;
 import com.atguigu.atcrowdfunding.bean.Role;
+import com.atguigu.atcrowdfunding.manager.service.PermissionService;
 import com.atguigu.atcrowdfunding.manager.service.RoleService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Page;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,9 +24,18 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private PermissionService permissionService;
+
     @RequestMapping("/toIndex")
     public String toIndex(){
         return "role/index";
+    }
+
+
+    @RequestMapping("/toAssignPermission")
+    public String toAssignPermission(){
+        return "role/assignPermission";
     }
 
     @ResponseBody
@@ -54,6 +67,49 @@ public class RoleController {
         return result;
     }
 
+    @ResponseBody
+    @RequestMapping("/asyncLoadData")
+    public Object asyncLoadData(){
+
+        AjaxResult result = new AjaxResult();
+
+        try{
+
+            //一次性从数据库中查询所有的数据
+            List<Permission> permissionList = permissionService.selectAllPermission();
+
+            //设置父节点list
+            List<Permission> root = new ArrayList();
+
+            //创建一个map集合
+            Map<Integer,Permission> map = new HashMap<>();
+
+            //提前遍历内层循环
+            for(Permission innerPermission : permissionList){
+                map.put(innerPermission.getId(),innerPermission);
+            }
+
+            //循环遍历
+            for(Permission permission : permissionList){
+                //判断当前对象是否为根节点
+                if(permission.getPid() == null){
+                    root.add(permission);
+                }else{
+                    Permission parent = map.get(permission.getPid());
+                    parent.getChildren().add(permission);
+                }
+            }
+
+            result.setDatas(root);
+            result.setSuccess(true);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("加载许可树失败");
+        }
+        return result;
+
+    }
 
 
 }
