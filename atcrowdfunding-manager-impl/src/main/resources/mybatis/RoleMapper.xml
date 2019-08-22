@@ -168,4 +168,24 @@
     from t_role
     limit #{startline},#{pagesize}
   </select>
+
+  <select id="queryPermissionByRoleID" parameterType="int" resultType="int">
+    select permissionid
+    FROM t_role_permission
+    WHERE roleid = #{roleId}
+  </select>
+
+  <delete id="deletePermissionByRoleID" parameterType="int">
+    DELETE FROM t_role_permission
+    WHERE roleid = #{roleId}
+  </delete>
+
+  <insert id="saveRolePermission">
+    <foreach collection="list" item="rolepermission" separator=";">
+      INSERT INTO t_role_permission
+        (roleid,permissionid)
+      VALUE
+        (#{rolepermission.roleid},#{rolepermission.permissionid})
+    </foreach>
+  </insert>
 </mapper>

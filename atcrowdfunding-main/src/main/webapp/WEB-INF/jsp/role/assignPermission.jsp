@@ -46,7 +46,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><i class="glyphicon glyphicon-th-list"></i> 权限分配列表<div style="float:right;cursor:pointer;" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-question-sign"></i></div></div>
                 <div class="panel-body">
-                    <button class="btn btn-success">分配许可</button>
+                    <button class="btn btn-success" id="assignPermissionBtn">分配许可</button>
                     <br><br>
                     <ul id="treeDemo" class="ztree"></ul>
                 </div>
@@ -84,7 +84,32 @@
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
 <script src="${APP_PATH}/script/docs.min.js"></script>
 <script src="${APP_PATH}/ztree/jquery.ztree.all-3.5.min.js"></script>
+<script src="${APP_PATH}/jquery/layer/layer.js"></script>
 <script type="text/javascript">
+    var setting = {
+        check : {
+            enable : true
+        },
+        view: {
+            selectedMulti: false,
+            addDiyDom: function(treeId, treeNode){
+                var aObj = $("#" + treeNode.tId + "_a"); // tId = permissionTree_1, ==> $("#permissionTree_1_a")
+                aObj.attr("href", "javascript:;");
+                var icoObj = $("#" + treeNode.tId + "_ico"); // tId = permissionTree_1, $("#permissionTree_1_ico")
+                if ( treeNode.icon ) {
+                    icoObj.removeClass("button ico_docu ico_open").addClass(treeNode.icon).css("background","");
+                }
+            },
+        },
+        async: {
+            enable: true,
+            url:"${APP_PATH}/role/asyncLoadData.do",
+            autoParam:["id", "name", "level"],
+            otherParam:["roleId",${param.roleId}],
+            dataFilter:filter
+        }
+    };
+
     $(function () {
         $(".list-group-item").click(function(){
             if ( $(this).find("ul") ) {
@@ -97,38 +122,67 @@
             }
         });
 
-        var setting = {
-            check : {
-                enable : true
-            },
-            view: {
-                selectedMulti: false,
-                addDiyDom: function(treeId, treeNode){
-                    var icoObj = $("#" + treeNode.tId + "_ico"); // tId = permissionTree_1, $("#permissionTree_1_ico")
-                    if ( treeNode.icon ) {
-                        icoObj.removeClass("button ico_docu ico_open").addClass(treeNode.icon).css("background","");
-                    }
-                },
-            },
-            async: {
-                enable: true,
-                url:"${APP_PATH}/role/asyncLoadData.do",
-                autoParam:["id", "name", "level"],
-                otherParam:["roleId",${param.roleId}],
-                dataFilter:filter
-            }
-        };
+
         //$.fn.zTree.init($("#treeDemo"), setting); //异步访问数据
         $.fn.zTree.init($("#treeDemo"), setting);
     });
 
     //过滤异步加载ztree时返回的数据
     function filter(treeId, parentNode, childNodes) {
-        if (!childNodes)
-            return null;
-        childNodes = eval(childNodes); //必须转换为[{id:103,pId:1,name:'子节点3'}];这样的格式
+        //if (!childNodes)
+        //    return null;
+        //childNodes = eval(childNodes); //必须转换为[{id:103,pId:1,name:'子节点3'}];这样的格式
         return childNodes.datas;
     }
+
+    var loadingIndex = -1;
+
+    $("#assignPermissionBtn").click(function () {
+
+        //定义一个json，接收roleid以及选中的节点ID
+        var jsonObj = {
+            roleId:${param.roleId},
+        }
+
+        //获取树对象
+        var treeObj = $.fn.zTree.getZTreeObj("treeDemo");
+
+        //获取许可树中节点属性为check的节点id
+        var checkedNode = treeObj.getCheckedNodes(true);
+
+        //遍历获取许可树中节点属性为check的节点id，并组装到jsonObj中
+        $.each(checkedNode,function (i,n) {
+                jsonObj["ids["+i+"]"] = n.id;
+        })
+
+        layer.confirm("确定要分配这些权限给该用户吗？",  {icon: 3, title:'提示'}, function(cindex){
+            layer.close(cindex);
+
+            //发起异步请求
+            $.ajax({
+                type:"post",
+                url:"${APP_PATH}/role/doAssignPermission.do",
+                data:jsonObj,
+                beforeSend:function () {
+                    loadingIndex = layer.load(3, {time: 10*1000});
+                    return true
+                },
+                success:function (result) {
+                    if(result.success){
+                        layer.close(loadingIndex);
+                        $.fn.zTree.init($("#treeDemo"), setting);
+                    }else{
+                        layer.msg(result.message,{time:2000, icon:5, shift:5})
+                    }
+                }
+            })
+        }, function(cindex){
+            layer.close(cindex);
+        });
+
+
+    })
+
 </script>
 </body>
 </html>

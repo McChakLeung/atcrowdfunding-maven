@@ -14,7 +14,17 @@ public class Permission {
 
     private String url;
 
-    private boolean open = false;
+    private boolean open = true;
+
+    private boolean checked;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     private List<Permission> children = new ArrayList<Permission>();
 

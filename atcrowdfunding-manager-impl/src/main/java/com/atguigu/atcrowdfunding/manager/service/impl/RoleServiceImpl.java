@@ -1,12 +1,15 @@
 package com.atguigu.atcrowdfunding.manager.service.impl;
 
+import com.atguigu.atcrowdfunding.bean.Permission;
 import com.atguigu.atcrowdfunding.bean.Role;
+import com.atguigu.atcrowdfunding.bean.RolePermission;
 import com.atguigu.atcrowdfunding.manager.dao.RoleMapper;
 import com.atguigu.atcrowdfunding.manager.service.RoleService;
 import com.atguigu.atcrowdfunding.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,5 +32,32 @@ public class RoleServiceImpl implements RoleService {
         List<Role> roleList = roleMapper.queryRoleListByParams(params);
         page.setDatalist(roleList);
         return page;
+    }
+
+    @Override
+    public List<Permission> queryPermissionByRoleID(Integer roleId) {
+        return roleMapper.queryPermissionByRoleID(roleId);
+    }
+
+    @Override
+    public Integer processAssignPermission(Integer roleId, List<Integer> ids) {
+
+        //删除roleId对应的权限
+        roleMapper.deletePermissionByRoleID(roleId);
+
+        //组装RolePermission类，否则无法插入到数据库中
+        List<RolePermission> rolePermissionList = new ArrayList<>();
+
+        for (Integer permissionID: ids) {
+            RolePermission rolePermission = new RolePermission();
+            rolePermission.setRoleid(roleId);
+            rolePermission.setPermissionid(permissionID);
+            rolePermissionList.add(rolePermission);
+        }
+
+        //保存需要修改的数据到中间表
+        Integer count = roleMapper.saveRolePermission(rolePermissionList);
+
+        return count;
     }
 }

@@ -1,7 +1,9 @@
 package com.atguigu.atcrowdfunding.manager.dao;
 
+import com.atguigu.atcrowdfunding.bean.Permission;
 import com.atguigu.atcrowdfunding.bean.Role;
 import com.atguigu.atcrowdfunding.bean.RoleExample;
+import com.atguigu.atcrowdfunding.bean.RolePermission;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -31,4 +33,10 @@ public interface RoleMapper {
     int updateByPrimaryKey(Role record);
 
     List<Role> queryRoleListByParams(Map<String, Object> params);
+
+    List<Permission> queryPermissionByRoleID(Integer roleId);
+
+    void deletePermissionByRoleID(Integer roleId);
+
+    Integer saveRolePermission(List<RolePermission> rolePermissionList);
 }

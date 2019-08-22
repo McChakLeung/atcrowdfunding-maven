@@ -6,6 +6,7 @@ import com.atguigu.atcrowdfunding.manager.service.PermissionService;
 import com.atguigu.atcrowdfunding.manager.service.RoleService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Page;
+import com.atguigu.atcrowdfunding.vo.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +70,7 @@ public class RoleController {
 
     @ResponseBody
     @RequestMapping("/asyncLoadData")
-    public Object asyncLoadData(){
+    public Object asyncLoadData(Integer roleId){
 
         AjaxResult result = new AjaxResult();
 
@@ -77,6 +78,9 @@ public class RoleController {
 
             //一次性从数据库中查询所有的数据
             List<Permission> permissionList = permissionService.selectAllPermission();
+
+            //从数据库中查询roleId对应的Permission
+            List<Permission> permissionByRoleID = roleService.queryPermissionByRoleID(roleId);
 
             //设置父节点list
             List<Permission> root = new ArrayList();
@@ -86,6 +90,9 @@ public class RoleController {
 
             //提前遍历内层循环
             for(Permission innerPermission : permissionList){
+                if(permissionByRoleID.contains(innerPermission.getId())){
+                    innerPermission.setChecked(true);
+                }
                 map.put(innerPermission.getId(),innerPermission);
             }
 
@@ -108,8 +115,22 @@ public class RoleController {
             result.setMessage("加载许可树失败");
         }
         return result;
-
     }
 
+
+    @ResponseBody
+    @RequestMapping("/doAssignPermission")
+    public Object doAssignPermission(Integer roleId, Data data){
+        AjaxResult result = new AjaxResult();
+        try{
+            Integer count = roleService.processAssignPermission(roleId,data.getIds());
+            result.setSuccess(count>0);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.setSuccess(false);
+            result.setMessage("加载许可树失败");
+        }
+        return result;
+    }
 
 }
