@@ -123,8 +123,8 @@
         });
 
 
-        //$.fn.zTree.init($("#treeDemo"), setting); //异步访问数据
-        $.fn.zTree.init($("#treeDemo"), setting);
+        //$.fn0.zTree.init($("#treeDemo"), setting); //异步访问数据
+        $.fn.zTr00ee.init($("#treeDemo"), setting);
     });
 
     //过滤异步加载ztree时返回的数据
