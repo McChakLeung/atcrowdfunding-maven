@@ -133,20 +133,4 @@ public class RoleController {
         return result;
     }
 
-    @ResponseBody
-    @RequestMapping("/queryRoleInfo")
-    public Object queryRoleInfo(Integer id){
-        AjaxResult result = new AjaxResult();
-        try{
-            List<Role> roleList = roleService.queryRoleInfo(id);
-            result.setDatas(roleList);
-            result.setSuccess(roleList.size()>0);
-        }catch (Exception e){
-            e.printStackTrace();
-            result.setSuccess(false);
-            result.setMessage("加载许可树失败");
-        }
-        return result;
-    }
-
 }

@@ -62,7 +62,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<Role> queryRoleInfo(Integer id) {
+    public List queryRoleInfo(Integer id) {
         return roleMapper.queryRoleInfo(id);
     }
 }

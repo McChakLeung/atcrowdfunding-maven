@@ -40,5 +40,5 @@ public interface RoleMapper {
 
     Integer saveRolePermission(List<RolePermission> rolePermissionList);
 
-    List<Role> queryRoleInfo(Integer id);
+    List queryRoleInfo(Integer id);
 }

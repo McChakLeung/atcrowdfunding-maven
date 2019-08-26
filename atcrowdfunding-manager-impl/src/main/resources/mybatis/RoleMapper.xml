@@ -188,8 +188,8 @@
         (#{rolepermission.roleid},#{rolepermission.permissionid})
     </foreach>
   </insert>
-  <select id="queryRoleInfo" resultMap="BaseResultMap">
-        SELECT t_role.*  FROM t_user_role, t_role
+  <select id="queryRoleInfo" parameterType="int" resultMap="BaseResultMap">
+        SELECT  t_role.id id,t_role.name name  FROM t_user_role, t_role
         WHERE t_user_role.roleid = t_role.id
         AND t_user_role.userid = #{id}
   </select>

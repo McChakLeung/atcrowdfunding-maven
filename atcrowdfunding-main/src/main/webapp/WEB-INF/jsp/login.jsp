@@ -57,18 +57,16 @@
             </label>
         </div>
         <a class="btn btn-lg btn-success btn-block" onclick="dologin()" > 登录</a>
-
+        <div id="loginType" style="display: none" class="form-group">
+            <label for="ftype">请选择登陆角色：</label>
+            <select class="form-control" id="ftype" name="type">
+                <option value="0">请选择</option>
+            </select>
+        </div>
 
     </form>
 
-    <div id="loginType" style="display: none" class="input-group">
-        <label for="ftype">请选择登陆角色：</label>
-        <select class="form-control" id="ftype" name="type">
-            <option value="">请选择</option>
-        </select>
 
-        <%--<span id="fmessage" style="color: #a83c3a;">${exception.message }</span>--%>
-    </div>
 </div>
 <script src="${APP_PATH}/jquery/jquery-2.1.1.min.js"></script>
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
@@ -81,6 +79,8 @@
         var fuserpswd = $("#fuserpswd");
         // var ftype = $("#ftype");
         var loadingIndex = -1;
+
+        $("#ftype>option:gt(0)").remove();
 
         //异步请求
         $.ajax({
@@ -118,66 +118,36 @@
             success:function (result) {
                 layer.close(loadingIndex);
                 if(result.success==true) {
-                    <%--if ("member" == $("#ftype").val()) {--%>
-                        <%--window.location.href = "${APP_PATH}/index.htm";--%>
-                    <%--} else {--%>
-                        <%--window.location.href="${APP_PATH}/main.htm";--%>
-                    <%--}--%>
-                    <%--window.location.href="${APP_PATH}/main.htm";--%>
-
-                    showRole(${sessionScope.user.id});
-                    //showRole();
-                    layer.open({
-                        type: 1,
-                        title:"当前登陆账号为：" + "${sessionScope.user.username}",
-                        area: ['250px', '200px'],
-                        content: $('#loginType'),
-                        btn: ['确定', '取消'],
-                    });
-                }else{
-                    //$("#fmessage").text(result.message);
-                    layer.msg(result.message,{time:2000, icon:5, shift:5})
-                }
-            }
-            
-        });
-
-        //同步请求
-        // $("#loginForm").submit();
-
-    }
-
-    function showRole(id) {
-
-        var selectOption = $("#ftype>option:gt(0)");
-
-        $.ajax({
-            type:"post",
-            url:"${APP_PATH}/role/queryRoleInfo",
-            data:{
-                id:id
-            },
-            beforSend:function () {
-              return true
-            },
-            success:function (result) {
-                if(result.success){
-                    selectOption.remove();
                     $.each(result.datas,function (i,n) {
                         var $optionContent = $("<option></option>");
-                        // dataOption +=
-                        //     "<option value=" + value.deptNo + ">" + value.deptName + "</option>";
                         $optionContent.text(n.name);
                         $optionContent.val(n.id);
                         $optionContent.appendTo($("#ftype"));
                     })
+                    layer.open({
+                        type: 1,
+                        title:"当前登陆账号为：" + "${sessionScope.user.username}",
+                        area: ['350px', '200px'],
+                        content: $("#loginType"),
+                        btn: ['确定'],
+                        yes:function () {
+                            if($("#ftype").val()==0){
+                                layer.msg("角色未选择，请重新选择", {time:2000, icon:5, shift:5})
+                                return false
+                            }
+                            window.location.href="${APP_PATH}/main.htm"
+                        },
+                        cancel:function (index, layero) {
+                            layer.close(index)
+                        }
+                    });
                 }else{
-
+                    layer.msg(result.message,{time:2000, icon:5, shift:5})
                 }
             }
-
-        })
+        });
     }
+
 </script>
 </body>
 </html>

@@ -14,5 +14,5 @@ public interface RoleService {
 
     Integer processAssignPermission(Integer roleId, List<Integer> ids);
 
-    List<Role> queryRoleInfo(Integer id);
+    List queryRoleInfo(Integer id);
 }

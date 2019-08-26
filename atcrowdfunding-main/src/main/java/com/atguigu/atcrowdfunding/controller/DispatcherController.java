@@ -2,6 +2,7 @@ package com.atguigu.atcrowdfunding.controller;
 
 import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.exception.LoginException;
+import com.atguigu.atcrowdfunding.manager.service.RoleService;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Const;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -21,6 +23,8 @@ public class DispatcherController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleService roleService;
     /**
      * 该方法接收webapp目录中index.jsp跳转过来的请求，其中的index.htm在控制器中可以被识别
      *
@@ -95,9 +99,9 @@ public class DispatcherController {
             }
             //创建一个Const工具类，存放常量
             session.setAttribute(Const.LOGIN_USER,user);
-
-
-            result.setSuccess(true);
+            List roleList = roleService.queryRoleInfo(user.getId());
+            result.setDatas(roleList);
+            result.setSuccess(roleList.size()>0);
 
         }catch (Exception e){
             result.setSuccess(false);
@@ -110,6 +114,6 @@ public class DispatcherController {
     @RequestMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
-        return "redirect:/index.htm";
+        return "redirect:/login.htm";
     }
 }
