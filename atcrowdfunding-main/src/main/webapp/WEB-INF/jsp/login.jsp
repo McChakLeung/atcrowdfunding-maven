@@ -43,13 +43,7 @@
             <input type="password" class="form-control" id="fuserpswd" name="userpswd" placeholder="请输入登录密码" style="margin-top:10px;">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
-        <div class="form-group has-success has-feedback">
-            <select class="form-control" id="ftype" name="type">
-                <option value="member">会员</option>
-                <option value="user" selected>管理</option>
-            </select>
-            <%--<span id="fmessage" style="color: #a83c3a;">${exception.message }</span>--%>
-        </div>
+
         <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> 记住我
@@ -63,7 +57,18 @@
             </label>
         </div>
         <a class="btn btn-lg btn-success btn-block" onclick="dologin()" > 登录</a>
+
+
     </form>
+
+    <div id="loginType" style="display: none" class="input-group">
+        <label for="ftype">请选择登陆角色：</label>
+        <select class="form-control" id="ftype" name="type">
+            <option value="">请选择</option>
+        </select>
+
+        <%--<span id="fmessage" style="color: #a83c3a;">${exception.message }</span>--%>
+    </div>
 </div>
 <script src="${APP_PATH}/jquery/jquery-2.1.1.min.js"></script>
 <script src="${APP_PATH}/bootstrap/js/bootstrap.min.js"></script>
@@ -74,7 +79,7 @@
         //获取表单提交的数据
         var floginacct = $("#floginacct");
         var fuserpswd = $("#fuserpswd");
-        var ftype = $("#ftype");
+        // var ftype = $("#ftype");
         var loadingIndex = -1;
 
         //异步请求
@@ -84,7 +89,7 @@
             data:{
                 loginacct:floginacct.val(),
                 userpswd:fuserpswd.val(),
-                type:ftype.val()
+                //type:ftype.val()
             },
             //该函数用于在发生ajax请求前的处理，一般用于表单校验、加载进度条等
             beforeSend:function (XMLHttpRequest) {
@@ -118,7 +123,17 @@
                     <%--} else {--%>
                         <%--window.location.href="${APP_PATH}/main.htm";--%>
                     <%--}--%>
-                    window.location.href="${APP_PATH}/main.htm";
+                    <%--window.location.href="${APP_PATH}/main.htm";--%>
+
+                    showRole(${sessionScope.user.id});
+                    //showRole();
+                    layer.open({
+                        type: 1,
+                        title:"当前登陆账号为：" + "${sessionScope.user.username}",
+                        area: ['250px', '200px'],
+                        content: $('#loginType'),
+                        btn: ['确定', '取消'],
+                    });
                 }else{
                     //$("#fmessage").text(result.message);
                     layer.msg(result.message,{time:2000, icon:5, shift:5})
@@ -130,6 +145,38 @@
         //同步请求
         // $("#loginForm").submit();
 
+    }
+
+    function showRole(id) {
+
+        var selectOption = $("#ftype>option:gt(0)");
+
+        $.ajax({
+            type:"post",
+            url:"${APP_PATH}/role/queryRoleInfo",
+            data:{
+                id:id
+            },
+            beforSend:function () {
+              return true
+            },
+            success:function (result) {
+                if(result.success){
+                    selectOption.remove();
+                    $.each(result.datas,function (i,n) {
+                        var $optionContent = $("<option></option>");
+                        // dataOption +=
+                        //     "<option value=" + value.deptNo + ">" + value.deptName + "</option>";
+                        $optionContent.text(n.name);
+                        $optionContent.val(n.id);
+                        $optionContent.appendTo($("#ftype"));
+                    })
+                }else{
+
+                }
+            }
+
+        })
     }
 </script>
 </body>

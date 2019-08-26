@@ -60,4 +60,9 @@ public class RoleServiceImpl implements RoleService {
 
         return count;
     }
+
+    @Override
+    public List<Role> queryRoleInfo(Integer id) {
+        return roleMapper.queryRoleInfo(id);
+    }
 }

@@ -76,7 +76,7 @@ public class DispatcherController {
      */
     @ResponseBody
     @RequestMapping("/doLogin")
-    public Object doLogin(String loginacct, String userpswd, String type, HttpSession session){
+    public Object doLogin(String loginacct, String userpswd, HttpSession session){
 
         AjaxResult result = new AjaxResult();
 
@@ -85,7 +85,7 @@ public class DispatcherController {
             Map<String,Object> params = new HashMap();
             params.put("loginacct",loginacct);
             params.put("userpswd", MD5Util.digest(userpswd));
-            params.put("type",type);
+            //params.put("type",type);
             User user = userService.selectUserByLoginAccAndUserPassword(params);
             //判断是否能查询到user对象，如果查询不到，则说明用户名或密码错误
             if(user == null){
@@ -95,6 +95,8 @@ public class DispatcherController {
             }
             //创建一个Const工具类，存放常量
             session.setAttribute(Const.LOGIN_USER,user);
+
+
             result.setSuccess(true);
 
         }catch (Exception e){

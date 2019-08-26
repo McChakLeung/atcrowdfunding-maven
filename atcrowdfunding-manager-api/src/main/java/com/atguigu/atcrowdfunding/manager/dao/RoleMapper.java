@@ -39,4 +39,6 @@ public interface RoleMapper {
     void deletePermissionByRoleID(Integer roleId);
 
     Integer saveRolePermission(List<RolePermission> rolePermissionList);
+
+    List<Role> queryRoleInfo(Integer id);
 }
