@@ -226,4 +226,12 @@
     <include refid="Base_Column_List"></include>
     FROM t_permission
   </select>
+
+  <select id="queryPermissionByUserIDAndRoleID" resultMap="BaseResultMap">
+    SELECT t_permission.* FROM t_user_role,t_role_permission,t_permission
+    WHERE t_user_role.roleid = t_role_permission.roleid
+    AND t_role_permission.permissionid = t_permission.id
+    AND t_user_role.userid = #{userid}
+    AND t_user_role.roleid = #{roleId}
+  </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.atguigu.atcrowdfunding.bean.PermissionExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PermissionMapper {
     long countByExample(PermissionExample example);
@@ -34,4 +35,6 @@ public interface PermissionMapper {
     List<Permission> queryPermissionByParenetID(Integer id);
 
     List<Permission> selectAllPermission();
+
+    List<Permission> queryPermissionByUserIDAndRoleID(Map<String, Object> params);
 }

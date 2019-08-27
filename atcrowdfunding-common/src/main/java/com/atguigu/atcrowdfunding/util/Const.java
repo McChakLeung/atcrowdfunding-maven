@@ -5,4 +5,6 @@ public class Const {
     public static final String PAGE = "page";
     public static final String PASSWORD = "123456";
     public static final String ALL_PERMISSION_URI = "allPermissionUris";
+    public static final String MY_URIS = "myUris";
+
 }

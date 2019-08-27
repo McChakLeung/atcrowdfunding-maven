@@ -1,21 +1,22 @@
 package com.atguigu.atcrowdfunding.controller;
 
+import com.atguigu.atcrowdfunding.bean.Permission;
 import com.atguigu.atcrowdfunding.bean.User;
 import com.atguigu.atcrowdfunding.exception.LoginException;
+import com.atguigu.atcrowdfunding.manager.service.PermissionService;
 import com.atguigu.atcrowdfunding.manager.service.RoleService;
 import com.atguigu.atcrowdfunding.manager.service.UserService;
 import com.atguigu.atcrowdfunding.util.AjaxResult;
 import com.atguigu.atcrowdfunding.util.Const;
 import com.atguigu.atcrowdfunding.util.MD5Util;
+import javafx.scene.effect.SepiaTone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class DispatcherController {
@@ -25,6 +26,10 @@ public class DispatcherController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private PermissionService permissionService;
+
     /**
      * 该方法接收webapp目录中index.jsp跳转过来的请求，其中的index.htm在控制器中可以被识别
      *
@@ -79,8 +84,8 @@ public class DispatcherController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/doLogin")
-    public Object doLogin(String loginacct, String userpswd, HttpSession session){
+    @RequestMapping("/preLogin")
+    public Object preLogin(String loginacct, String userpswd, HttpSession session){
 
         AjaxResult result = new AjaxResult();
 
@@ -99,7 +104,15 @@ public class DispatcherController {
             }
             //创建一个Const工具类，存放常量
             session.setAttribute(Const.LOGIN_USER,user);
+            //查询用户登陆角色
             List roleList = roleService.queryRoleInfo(user.getId());
+//            if(roleList==null){
+//                result.setMessage("当前用户无登陆权限");
+//                result.setSuccess(false);
+//            }
+            //查询当前用户登陆的角色所拥有的权限
+
+
             result.setDatas(roleList);
             result.setSuccess(roleList.size()>0);
 
@@ -111,9 +124,61 @@ public class DispatcherController {
         return result;
     }
 
+    @RequestMapping("/doLogin")
+    public String doLogin(Integer roleId,HttpSession session){
+
+        //获取当前session中的User对象
+        User user = (User)session.getAttribute(Const.LOGIN_USER);
+
+        //创建Map集合接收参数
+        Map<String,Object> params = new HashMap<>();
+        params.put("userid",user.getId());
+        params.put("roleId",roleId);
+
+        //查询当前用户所选择的角色，获取登陆权限菜单列表
+        List<Permission> permissionList = permissionService.queryPermissionByUserIDAndRoleID(params);
+
+        //设置父节点list
+        Permission permissionRoot = null;
+
+        //创建一个map集合
+        Map<Integer,Permission> map = new HashMap<>();
+
+        //创建一个set集合，存放权限uri
+        Set<String> myUris = new HashSet<String>();
+
+        //提前遍历内层循环
+        for(Permission innerPermission : permissionList){
+            map.put(innerPermission.getId(),innerPermission);
+            myUris.add("/" + innerPermission.getUrl());
+        }
+
+        session.setAttribute(Const.MY_URIS,myUris);
+
+        //循环遍历
+        for(Permission permission : permissionList){
+
+            //判断当前对象是否为根节点
+            if(permission.getPid() == null){
+                permissionRoot = permission;
+            }else{
+                Permission parent = map.get(permission.getPid());
+                parent.getChildren().add(permission);
+            }
+        }
+        //将查询结果放到session中
+        session.setAttribute("permissionRoot", permissionRoot);
+        return "/main";
+    }
+
     @RequestMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/login.htm";
+    }
+
+    @RequestMapping("/auth")
+    public String auth(){
+        return "/auth";
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PermissionServiceImpl implements PermissionService {
@@ -47,5 +48,10 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public int deletePermission(Integer id) {
         return permissionMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Permission> queryPermissionByUserIDAndRoleID(Map<String, Object> params) {
+        return permissionMapper.queryPermissionByUserIDAndRoleID(params);
     }
 }

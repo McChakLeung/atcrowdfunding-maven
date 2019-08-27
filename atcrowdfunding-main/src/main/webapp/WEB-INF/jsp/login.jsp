@@ -85,7 +85,7 @@
         //异步请求
         $.ajax({
             type:"post",
-            url:"${APP_PATH}/doLogin.do",
+            url:"${APP_PATH}/preLogin.do",
             data:{
                 loginacct:floginacct.val(),
                 userpswd:fuserpswd.val(),
@@ -135,7 +135,9 @@
                                 layer.msg("角色未选择，请重新选择", {time:2000, icon:5, shift:5})
                                 return false
                             }
-                            window.location.href="${APP_PATH}/main.htm"
+                            var roleId = $("#ftype").val();
+                            //alert(roleId)
+                            window.location.href="${APP_PATH}/doLogin.do?roleId="+roleId
                         },
                         cancel:function (index, layero) {
                             layer.close(index)
