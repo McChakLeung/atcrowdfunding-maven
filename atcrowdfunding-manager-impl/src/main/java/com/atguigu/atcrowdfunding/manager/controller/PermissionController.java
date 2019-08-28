@@ -22,8 +22,8 @@ public class PermissionController {
     @Autowired
     private PermissionService permissionService;
 
-    @RequestMapping("/index")
-    public String index(){
+    @RequestMapping("/toIndex")
+    public String toIndex(){
         return "/permission/index";
     }
 

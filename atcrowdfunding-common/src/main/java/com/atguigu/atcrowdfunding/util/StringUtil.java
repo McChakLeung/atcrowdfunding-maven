@@ -1,5 +1,8 @@
 package com.atguigu.atcrowdfunding.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class StringUtil {
 
 	public static boolean isEmpty(String s) {
@@ -10,4 +13,6 @@ public class StringUtil {
 	public static boolean isNotEmpty(String s) {
 		return !isEmpty(s);
 	}
+
+
 }
